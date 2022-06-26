@@ -7,12 +7,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       User.hasMany(models.Review, { foreignKey: 'UserId' })
       User.hasMany(models.Event, { foreignKey: 'HostId' })
-      User.hasMany(models.Friendship, { foreignKey: 'receiverId' })
-      User.hasMany(models.Friendship, { foreignKey: 'requesterId' })
+      User.hasMany(models.Friendship, { foreignKey: 'ReceiverId' })
+      User.hasMany(models.Friendship, { foreignKey: 'RequesterId' })
       User.belongsToMany(models.Review, { through: models.LikedReview, foreignKey: 'UserId', as: 'LikedReviews' })
       User.belongsToMany(models.Book, { through: models.LikedBook, foreignKey: 'UserId', as: 'LikedBooks' })
-      User.belongsToMany(User, { through: models.Friendship, foreignKey: 'receiverId', as: 'Requesters' })
-      User.belongsToMany(User, { through: models.Friendship, foreignKey: 'requesterId', as: 'Receivers' })
+      User.belongsToMany(User, { through: models.Friendship, foreignKey: 'ReceiverId', as: 'Requesters' })
+      User.belongsToMany(User, { through: models.Friendship, foreignKey: 'RequesterId', as: 'Receivers' })
+      User.belongsToMany(models.Event, { through: models.Participation, foreignKey: 'MemberId' })
     }
   }
   User.init({
