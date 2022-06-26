@@ -9,15 +9,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       topic: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       start_at: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       end_at: {
+        allowNull: false,
         type: Sequelize.DATE
       },
       memberCount: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       meetingLink: {
@@ -30,9 +34,11 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       host_id: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       book_id: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       created_at: {

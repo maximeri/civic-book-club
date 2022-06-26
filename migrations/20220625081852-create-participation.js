@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       event_id: {
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       member_id: {
