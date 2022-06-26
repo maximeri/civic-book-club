@@ -12,10 +12,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       receiver_id: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       requester_id: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       created_at: {
         allowNull: false,

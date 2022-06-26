@@ -9,10 +9,12 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       name: {
+        allowNull: false,
         type: Sequelize.STRING
       },
       ISBN: {
-        type: Sequelize.NUMBER
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       introduction: {
         type: Sequelize.TEXT

@@ -9,10 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       event_id: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       member_id: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       created_at: {
         allowNull: false,

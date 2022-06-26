@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.DATE
       },
       memberCount: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       meetingLink: {
         type: Sequelize.STRING
@@ -30,10 +30,10 @@ module.exports = {
         type: Sequelize.BOOLEAN
       },
       host_id: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       book_id: {
-        type: Sequelize.NUMBER
+        type: Sequelize.INTEGER
       },
       created_at: {
         allowNull: false,
