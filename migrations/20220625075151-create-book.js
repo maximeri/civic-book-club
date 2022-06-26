@@ -14,7 +14,7 @@ module.exports = {
       },
       ISBN: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
       },
       introduction: {
         type: Sequelize.TEXT

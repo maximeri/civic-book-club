@@ -13,7 +13,7 @@ function generateUsers() {
       preference: faker.lorem.sentence(),
       job: faker.lorem.sentence(),
       goal: faker.lorem.sentence(),
-      avatar: `https://loremflickr.com/320/240/people/?random=${Math.random() * 100}`,
+      avatar: `https://loremflickr.com/320/240/people/?random=${Math.floor(100 + Math.random() * 900) }`,
       created_at: new Date(),
       updated_at: new Date()
     }
