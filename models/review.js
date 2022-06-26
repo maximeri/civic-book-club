@@ -5,7 +5,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Review extends Model {
     static associate(models) {
-      // define association here
+      Event.belongsToMany(models.User, { foreignKey: 'UserId' })
+      Event.belongsToMany(models.Book, { foreignKey: 'BookId' })
+      Event.belongsToMany(models.User, { through: models.LikedReview, foreignKey: 'ReviewId' })
     }
   }
   Review.init({
