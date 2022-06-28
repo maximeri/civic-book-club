@@ -40,6 +40,13 @@ const userController = {
   getUser: (req, res, next) => {
     return User.findOne({
       where: { id: req.params.id },
+      include: [
+        {
+          model: User,
+          as: 'Requesters',
+          attributes: ['status']
+        }
+      ],
       order: [['createdAt', 'DESC']]
     })
       .then(user => {

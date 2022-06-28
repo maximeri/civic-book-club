@@ -15,7 +15,7 @@ router.post('/users/login', passport.authenticate('local', { session: false }), 
 router.post('/users', userController.signUp)
 router.get('/get_current_user', authenticated, userController.getCurrentUser)
 router.use('/users', authenticated, users)
-// router.use('/friendships', authenticated, friendships)
+router.use('/friendships', authenticated, friendships)
 // router.use('/books', authenticated, books)
 // router.use('/events', authenticated, events)
 // router.use('/reviews', authenticated, reviews)
