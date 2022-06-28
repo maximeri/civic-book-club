@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { User } = require('../models')
+const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const userController = {
   signUp: (req, res, next) => {
@@ -63,6 +64,49 @@ const userController = {
     return res.json({
       currentUser
     })
+  },
+  putUser: (req, res, next) => {
+    if (Number(req.params.id) !== Number(req.user.id)) {
+      throw new Error("User doen't have permission!")
+    }
+    const preference = req.body.preference || req.user.preference
+    const job = req.body.job || req.user.job
+    const goal = req.body.goal || req.user.goal
+    const password = req.body.password ? bcrypt.hashSync(req.body.password, 10) : req.user.password
+    const name = req.body?.name || req.user.name
+    const account = req.body?.account || req.user.account
+    const email = req.body?.email || req.user.email
+    const avatar = req.files?.avatar ? req.files.avatar[0] : null
+    Promise.all([
+      User.findOne({ where: { email } }),
+      User.findOne({ where: { account } }),
+      User.findByPk(req.params.id),
+      imgurFileHandler(avatar)])
+      .then(([
+        findEmail,
+        findAccount,
+        user,
+        avatarFilePath,
+      ]) => {
+        if (findEmail && findEmail.id !== req.user.id) throw new Error('Email has already been taken.')
+        if (findAccount && findAccount.id !== req.user.id) throw new Error('Account has already been taken.')
+        return user.update({
+          name,
+          account,
+          email,
+          password,
+          avatar: avatarFilePath || user.avatar,
+          preference,
+          job,
+          goal
+        })
+      })
+      .then(user => {
+        user = user.toJSON()
+        delete user.password
+        return res.json(user)
+      })
+      .catch(err => next(err))
   }
 }
 
