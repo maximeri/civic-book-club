@@ -1,4 +1,4 @@
-const { Book, User, Review, LikedReview } = require('../models')
+const { User, Review, LikedReview } = require('../models')
 
 const reviewController = {
   getReviews: (req, res, next) => {
