@@ -51,7 +51,7 @@ const reviewController = {
       })
       .catch(err => next(err))
   },
-  deleteReview: (req, res, next) => {
+  deleteReview: async (req, res, next) => {
     const userId = req.user.id
     const reviewId = req.params.id
     try {
