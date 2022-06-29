@@ -82,9 +82,6 @@ const bookController = {
   },
   editBook: (req, res, next) => {
     // once the book is created, only name, image, and introduction can be edited
-    if (Number(req.params.id) !== Number(req.user.id)) {
-      throw new Error("User doen't have permission!")
-    }
     const introduction = req.body.introduction || null
     const name = req.body?.name || null
     const image = req.files?.image ? req.files.image[0] : null
