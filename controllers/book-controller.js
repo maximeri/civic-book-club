@@ -69,6 +69,7 @@ const bookController = {
     if (!name || !ISBN ) throw new Error('Field required!')
     if (Book.findOne({ where: { ISBN } })) throw new Error('Book already exists!')
     return Book.create({
+      UserId: req.user.id,
       name,
       ISBN,
       introduction,
