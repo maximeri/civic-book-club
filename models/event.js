@@ -19,7 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     isPublished: DataTypes.BOOLEAN,
     isPrivate: DataTypes.BOOLEAN,
     host_id: DataTypes.NUMBER,
-    book_id: DataTypes.NUMBER
+    book_id: DataTypes.NUMBER,
+    currentMemberCount: DataTypes.NUMBER
   }, {
     sequelize,
     modelName: 'Event',
