@@ -10,9 +10,6 @@ const passport = require('./config/passport')
 const SESSION_SECRET = 'secret'
 const { getUser } = require('./helpers/auth-helpers')
 
-app.engine('.hbs', engine({ defaultLayout: 'main', extname: '.hbs' }));
-app.set('view engine', '.hbs');
-app.set('views', './views');
 app.use(express.json())
 app.use(express.urlencoded({ extended: true })) 
 app.use(session({

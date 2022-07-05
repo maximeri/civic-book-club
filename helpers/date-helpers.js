@@ -1,16 +1,17 @@
-function jsDateConverter(isoFormatDateString) {
+function jsDate(isoFormatDateString) {
   date = new Date(isoFormatDateString);
   year = date.getFullYear();
   month = date.getMonth() + 1;
-  dt = date.getDate();
+  dt = date.getDate()
 
   if (dt < 10) {
     dt = '0' + dt;
   }
+
   if (month < 10) {
     month = '0' + month;
   }
-  return [year, month, date]
+  return [year, month, dt]
 }
 
-module.exports = jsDateConverter 
+module.exports = jsDate 
