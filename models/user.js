@@ -5,15 +5,13 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.hasMany(models.Review, { foreignKey: 'UserId' })
-      User.hasMany(models.Event, { foreignKey: 'HostId' })
-      User.hasMany(models.Friendship, { foreignKey: 'ReceiverId' })
-      User.hasMany(models.Friendship, { foreignKey: 'RequesterId' })
-      User.belongsToMany(models.Review, { through: models.LikedReview, foreignKey: 'UserId', as: 'LikedReviews' })
-      User.belongsToMany(models.Book, { through: models.LikedBook, foreignKey: 'UserId', as: 'LikedBooks' })
-      User.belongsToMany(User, { through: models.Friendship, foreignKey: 'ReceiverId', as: 'Requesters' })
-      User.belongsToMany(User, { through: models.Friendship, foreignKey: 'RequesterId', as: 'Receivers' })
-      User.belongsToMany(models.Event, { through: models.Participation, foreignKey: 'MemberId' })
+      User.hasMany(models.Review, { foreignKey: 'userId' })
+      User.hasMany(models.Event, { foreignKey: 'hostId' })
+      User.belongsToMany(models.Review, { through: models.LikedReview, foreignKey: 'userId', as: 'LikedReviews' })
+      User.belongsToMany(models.Book, { through: models.LikedBook, foreignKey: 'userId', as: 'LikedBooks' })
+      User.belongsToMany(User, { through: models.Friendship, foreignKey: 'receiverId', as: 'Requesters' })
+      User.belongsToMany(User, { through: models.Friendship, foreignKey: 'requesterId', as: 'Receivers' })
+      User.belongsToMany(models.Event, { through: models.Participation, foreignKey: 'memberId', as: 'ParticipatedEvents' })
     }
   }
   User.init({

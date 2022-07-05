@@ -5,18 +5,14 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Book extends Model {
     static associate(models) {
-      Book.hasMany(models.Review, { foreignKey: 'BookId' })
-      Book.hasMany(models.Event, { foreignKey: 'BookId' })
-      Book.belongsToMany(models.User, {
-        through: models.LikedBook,
-        foreignKey: 'BookId',
-        as: 'LikedBooks'
-      })
+      Book.hasMany(models.Review, { foreignKey: 'bookId' })
+      Book.hasMany(models.Event, { foreignKey: 'bookId' })
+      Book.belongsToMany(models.User, { through: models.LikedBook, foreignKey: 'bookId', as: 'LikedBookUsers' })
     }
   }
   Book.init({
     name: DataTypes.STRING,
-    ISBN: DataTypes.STRING,
+    isbn: DataTypes.STRING,
     introduction: DataTypes.TEXT,
     image: DataTypes.STRING
   }, {

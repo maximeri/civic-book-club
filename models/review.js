@@ -5,9 +5,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Review extends Model {
     static associate(models) {
-      Review.hasMany(models.User, { foreignKey: 'UserId' })
-      Review.hasMany(models.Book, { foreignKey: 'BookId' })
-      Review.belongsToMany(models.User, { through: models.LikedReview, foreignKey: 'ReviewId' })
+      Review.belongsTo(models.User, { foreignKey: 'userId' })
+      Review.belongsTo(models.Book, { foreignKey: 'bookId' })
+      Review.belongsToMany(models.User, { through: models.LikedReview, foreignKey: 'reviewId', as: 'LikedReviewUsers' })
     }
   }
   Review.init({
@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Review',
+    tableName: 'Reviews',
     underscored: true,
   });
   return Review;

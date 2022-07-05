@@ -5,9 +5,9 @@ const {
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
     static associate(models) {
-      Event.belongsTo(models.User, {foreignKey: 'HostId'})
-      Event.belongsTo(models.Book, { foreignKey: 'BookId'})
-      Event.belongsToMany(models.User, { through: models.Participation ,foreignKey: 'EventId' })
+      Event.belongsTo(models.User, {foreignKey: 'hostId'})
+      Event.belongsTo(models.Book, { foreignKey: 'bookId'})
+      Event.belongsToMany(models.User, { through: models.Participation, foreignKey: 'eventId', as: 'ParticipatedUsers' })
     }
   }
   Event.init({
@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Event',
-    tableName: 'Event',
+    tableName: 'Events',
     underscored: true,
   });
   return Event;
