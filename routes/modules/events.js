@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const eventController = require('../../../controllers/event-controller')
+const eventController = require('../../controllers/event-controller')
 
 router.delete('/host/:id', eventController.deleteEvent) // delete an event
 router.post('/member/:id', eventController.joinEvent) // join an event

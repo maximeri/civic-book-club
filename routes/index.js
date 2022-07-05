@@ -8,9 +8,9 @@ const books = require('./modules/books')
 const events = require('./modules/events')
 const reviews = require('./modules/reviews')
 const { authenticated } = require('../middleware/auth')
-const userController = require('../../controllers/user-controller')
+const userController = require('../controllers/user-controller')
 
-// 將不同的 routes 拆分
+// routes
 router.post('/users/login', passport.authenticate('local', { session: false }), userController.logIn)
 router.post('/users', userController.signUp)
 router.get('/get_current_user', authenticated, userController.getCurrentUser)
