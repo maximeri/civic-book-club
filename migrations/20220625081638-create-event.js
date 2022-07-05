@@ -20,17 +20,21 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      memberCount: {
+      member_count: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      meetingLink: {
+      current_member_count: {
+        type: Sequelize.INTEGER,
+        defaultValue: 1
+      },
+      meeting_link: {
         type: Sequelize.STRING
       },
-      isPublished: {
+      is_published: {
         type: Sequelize.BOOLEAN
       },
-      isPrivate: {
+      is_private: {
         type: Sequelize.BOOLEAN
       },
       host_id: {

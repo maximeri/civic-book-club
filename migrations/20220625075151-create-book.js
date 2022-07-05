@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      ISBN: {
+      isbn: {
         allowNull: false,
         type: Sequelize.STRING
       },
