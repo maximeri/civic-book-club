@@ -3,13 +3,13 @@ const router = express.Router()
 const upload = require('../../middleware/multer')
 const bookController = require('../../controllers/book-controller')
 
-router.post('/:id', bookController.likeBook) // 收藏書
-router.post('/', bookController.addBook) // 建立書
-router.delete('/:id', bookController.unlikeBook) // 取消收藏書
-router.put('/:id', upload.fields([{ name: 'image', maxCount: 1 }], bookController.editBook)) // 編輯書
-router.get('/top10', bookController.getTopBooks) // 查看最受歡迎的 10 本書
-router.get('/user/:userId', bookController.getUserBooks) // 查看使用者收藏的所有書
-router.get('/:id', bookController.getBook) // 查看個別書
-router.get('/', bookController.getBooks) // 查看所有書
+router.post('/:id', bookController.likeBook) // like a book
+router.post('/', bookController.addBook) // add a book
+router.delete('/:id', bookController.unlikeBook) // unlike a book
+router.put('/:id', upload.single('image'), bookController.editBook) // edit book info
+router.get('/top10', bookController.getTopBooks) // view top 10 books
+router.get('/user/:userId', bookController.getUserBooks) // View a user's liked books
+router.get('/:id', bookController.getBook) // view a book
+router.get('/', bookController.getBooks) // view all books
 
 module.exports = router
