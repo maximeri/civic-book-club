@@ -2,7 +2,7 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const passportJWT = require('passport-jwt')
 const bcrypt = require('bcryptjs')
-const { User, Book, Event, Review } = require('../models')
+const { User, Book, Review } = require('../models')
 const JWTStrategy = passportJWT.Strategy
 const ExtractJWT = passportJWT.ExtractJwt
 
@@ -35,10 +35,11 @@ const jwtOptions = {
 passport.use(new JWTStrategy(jwtOptions, (jwtPayload, cb) => {
   User.findByPk(jwtPayload.id, {
     include: [
-      { model: User },
-      { model: Book },
-      { model: Event },
-      { model: Review }
+      { model: Review},
+      { model: Review, as: 'LikedReviews' },
+      { model: Book, as: 'LikedBooks' },
+      { model: User, as: 'Requesters'},
+      { model: User, as: 'Receivers' }
     ]
   })
     .then(user => cb(null, user))
@@ -52,11 +53,13 @@ passport.serializeUser((user, cb) => {
 passport.deserializeUser((id, cb) => {
   return User.findByPk(id, {
     include: [
-      { model: User },
-      { model: Book },
-      { model: Event },
-      { model: Review }
+      { model: Review },
+      { model: Review, as: 'LikedReviews' },
+      { model: Book, as: 'LikedBooks' },
+      { model: User, as: 'Requesters' },
+      { model: User, as: 'Receivers' }
     ]
+    
   })
     .then(user => cb(null, user.toJSON()))
     .catch(err => cb(err))
