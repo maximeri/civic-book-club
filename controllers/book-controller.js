@@ -5,19 +5,19 @@ const bookController = {
   getBooks: (req, res, next) => {
     return Book.findAndCountAll({
       include: [
-        { model: User, as: 'LikedBooks', attributes: ['id'] }
+        { model: User, as: 'LikedBookUsers', attributes: ['id'] }
       ],
       order: [['createdAt', 'DESC']]
     })
-    .then(books => {
-      const likedBookId = req.user?.LikedBooks ? req.user.LikedBooks.map(likeBook => likeBook.id) : []
-      const resultBooks = books.rows.map(r => ({
-        ...r.toJSON(),
-        isLiked: likedBookId.includes(r.id),
-        totalLikes: r.LikedBooks ? r.LikedBooks.length : 0
-      }))
-      return res.json(resultBooks)
-    })
+      .then(books => {
+        const likedBookUserId = req.user?.LikedBooks ? req.user.LikedBooks.map(likeBooks => likeBooks.id) : []
+        const resultBooks = books.rows.map(r => ({
+          ...r.toJSON(),
+          isLiked: likedBookUserId.includes(r.id),
+          totalLikes: r.LikedBooks ? r.LikedBooks.length : 0
+        }))
+        return res.json(resultBooks)
+      })
       .catch(err => next(err))
   },
   getBook: (req, res, next) => {
@@ -30,7 +30,7 @@ const bookController = {
   },
   getUserBooks: (req, res, next) => {
     return LikedBook.findAll({
-      where: { UserId: req.params.id },
+      where: { userId: req.params.userId },
       order: [['createdAt', 'DESC']]
     })
       .then(books => {
@@ -41,7 +41,7 @@ const bookController = {
   getTopBooks: (req, res, next) => {
     return Book.findAll({
       include: [{
-        model: User, as: 'LikedBooks'
+        model: User, as: 'LikedBookUsers'
       }]
     })
       .then(books => {
@@ -50,31 +50,34 @@ const bookController = {
             books.splice(i, 1)
           }
         }
+        const likedBookId = req.user?.LikedBooks ? req.user.LikedBooks.map(lb => lb.id) : []
         books = books.map(b => ({
           ...b.dataValues,
-          likeCount: b.LikedBooks.length,
-          isLiked: req.user && req.user.LikedBooks.map(lb => lb.id).includes(b.id)
+          likeCount: b.LikedBookUsers.length,
+          isLiked: req.user && likedBookId.includes(b.id)
         }))
-        books.sort((a, b) => b.followerCount - a.followerCount)
+        books.sort((a, b) => b.likeCount - a.likeCount)
         books = books.slice(0, 10)
         res.json(books)
       })
       .catch(err => next(err))
   },
   addBook: (req, res, next) => {
-    const name = req.body.name
-    const ISBN = req.body.ISBN
-    const introduction = req.body.introduction
-    const image = req.files?.image ? req.files.image[0] : null
-    if (!name || !ISBN ) throw new Error('Field required!')
-    if (Book.findOne({ where: { ISBN } })) throw new Error('Book already exists!')
-    return Book.create({
-      UserId: req.user.id,
-      name,
-      ISBN,
-      introduction,
-      image
-    })
+    const { name, isbn, introduction } = req.body
+    const { file } = req
+    if (!name || !isbn) throw new Error('Field required!')
+    Promise.all([Book.findOne({ where: { isbn: isbn } }), Book.findOne({ where: { name: name } })])
+      .then(([findIsbn, findName]) => {
+        if (findIsbn) throw new Error('Book isbn already exists!')
+        if (findName) throw new Error('Book name already exists!')
+  return Book.create({
+    userId: req.user.id,
+    name: name,
+    isbn: isbn,
+    introduction,
+    image: file || null
+  })
+      })
       .then(book => {
         return res.json(book)
       })
@@ -84,19 +87,19 @@ const bookController = {
     // once the book is created, only name, image, and introduction can be edited
     const introduction = req.body.introduction || null
     const name = req.body?.name || null
-    const image = req.files?.image ? req.files.image[0] : null
+    const { file } = req
     if (!name || !introduction) throw new Error('Field required!')
     Promise.all([
       Book.findByPk(req.params.id),
       Book.findOne({ where: { name } }),
-      imgurFileHandler(image)])
-      .then( ([book,name,imageFilePath]) => {
+      imgurFileHandler(file)])
+      .then(([book, findName, filePath]) => {
         if (!book) throw new Error('The book has not been created yet.')
-        if (!name) throw new Error('Name has already been taken.')
+        if ((Number(book.id) !== Number(req.params.id)) && findName) throw new Error('Name has already been taken.')
         return book.update({
           name,
           introduction,
-          cover: imageFilePath
+          image: filePath || book.image
         })
       })
       .then(book => {
@@ -119,8 +122,8 @@ const bookController = {
     ])
       .then(([book, like]) => {
         if (!book) throw new Error("Book doesn't exist!")
-        if (like) throw new Error('You have liked this tweet!')
-        return Book.create({
+        if (like) throw new Error('You have liked this book!')
+        return LikedBook.create({
           userId,
           bookId
         })
@@ -141,7 +144,7 @@ const bookController = {
     })
       .then(likedBook => {
         if (!likedBook) throw new Error("You haven't liked this book!")
-        return LikedBook.destroy()
+        return likedBook.destroy()
       })
       .then(unlike => {
         return res.json(unlike)
@@ -149,6 +152,6 @@ const bookController = {
       .catch(err => next(err))
   }
 }
-  
+
 
 module.exports = bookController
