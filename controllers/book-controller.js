@@ -14,7 +14,7 @@ const bookController = {
         const resultBooks = books.rows.map(r => ({
           ...r.toJSON(),
           isLiked: likedBookUserId.includes(r.id),
-          totalLikes: r.LikedBooks ? r.LikedBooks.length : 0
+          totalLikes:r.LikedBookUsers.length
         }))
         return res.json(resultBooks)
       })
