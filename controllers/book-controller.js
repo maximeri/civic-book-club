@@ -45,16 +45,10 @@ const bookController = {
       }]
     })
       .then(books => {
-        for (let i = 0; i < books.length; i++) {
-          if (books[i].userId === req.user.id) {
-            books.splice(i, 1)
-          }
-        }
         const likedBookId = req.user?.LikedBooks ? req.user.LikedBooks.map(lb => lb.id) : []
         books = books.map(b => ({
           ...b.dataValues,
-          likeCount: b.LikedBookUsers.length,
-          isLiked: req.user && likedBookId.includes(b.id)
+          likeCount: b.LikedBookUsers.length
         }))
         books.sort((a, b) => b.likeCount - a.likeCount)
         books = books.slice(0, 10)
