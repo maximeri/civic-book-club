@@ -4,6 +4,7 @@ const reviewController = {
   getReviews: (req, res, next) => {
       return Review.findAndCountAll({
         include: [
+          { model: User, attributes: ['id','name','avatar'] },
           { model: User, as: 'LikedReviewUsers', attributes: ['id'] }
         ],
         where:{ bookId: req.params.bookId },
