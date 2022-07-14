@@ -131,7 +131,7 @@ const eventController = {
       .then(events => {
         const resultEvents = events.rows.map(r => ({
           ...r.toJSON(),
-          currentMemberCount: r.length
+          currentMemberCount: r.ParticipatedUsers.length
         }))
         return res.json(resultEvents)
       })
