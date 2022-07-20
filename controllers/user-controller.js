@@ -27,13 +27,20 @@ const userController = {
   },
   logIn: (req, res, next) => {
     try {
-      const userData = req.user.toJSON()
+      const userData = req.user.toJSON() // userData were gotten from the authentication middleware
       delete userData.password
       const token = jwt.sign(userData, process.env.JWT_SECRET, { expiresIn: '30d' }) // 簽發 JWT，效期為 30 天
-      res.json({
-        token,
-        user: userData
-      })
+      // console.log(token)
+      res
+      .status(201)
+      .cookie('access_token', token, {
+          expires: new Date(Date.now() + 8 * 3600000) // cookie will be removed after 8 hours
+        })
+      // .json({
+      //   token,
+      //   user: userData
+      // })
+        .redirect('http://localhost:3000/index.html')
     } catch (err) {
       next(err)
     }
@@ -106,6 +113,10 @@ const userController = {
         return res.json(user)
       })
       .catch(err => next(err))
+  },
+  logout: (req, res) => {
+    req.logout()
+    res.redirect('/login.html')
   }
 }
 
