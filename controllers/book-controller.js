@@ -116,7 +116,7 @@ const bookController = {
     ])
       .then(([book, like]) => {
         if (!book) throw new Error("Book doesn't exist!")
-        if (like) throw new Error('You have liked this book!')
+        if (like) return like.destroy()
         return LikedBook.create({
           userId,
           bookId
@@ -124,24 +124,6 @@ const bookController = {
       })
       .then(likedBook => {
         return res.json(likedBook)
-      })
-      .catch(err => next(err))
-  },
-  unlikeBook: (req, res, next) => {
-    const userId = req.user.id
-    const bookId = req.params.id
-    return LikedBook.findOne({
-      where: {
-        userId,
-        bookId
-      }
-    })
-      .then(likedBook => {
-        if (!likedBook) throw new Error("You haven't liked this book!")
-        return likedBook.destroy()
-      })
-      .then(unlike => {
-        return res.json(unlike)
       })
       .catch(err => next(err))
   }
