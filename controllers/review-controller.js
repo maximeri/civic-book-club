@@ -34,7 +34,7 @@ const reviewController = {
         const resultReviews = reviews.rows.map(r => ({
           ...r.toJSON(),
           isLiked: likedReviewId.includes(r.id),
-          totalLikes: r.likeReviews ? r.likeReviews.length : 0
+          totalLikes: r.LikedReviewUsers.length
         }))
         return res.json(resultReviews)
       })
