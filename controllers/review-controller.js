@@ -15,7 +15,7 @@ const reviewController = {
           const resultReviews = reviews.rows.map(r => ({
             ...r.toJSON(),
             isLiked: likedReviewId.includes(r.id),
-            totalLikes: r.likeReviews ? r.likeReviews.length : 0
+            totalLikes: r.LikedReviewUsers.length
           }))
           return res.json(resultReviews)
         })
@@ -102,7 +102,7 @@ const reviewController = {
     ])
       .then(([review, like]) => {
         if (!review) throw new Error("Review doesn't exist!")
-        if (like) throw new Error('You have liked this review!')
+        if (like) return like.destroy()
         return LikedReview.create({
           userId,
           reviewId
