@@ -1,9 +1,10 @@
 const { User, Book, Event, Participation } = require('../models')
+const { Op } = require("sequelize")
 
 const eventController = {
   addEvent: (req, res, next) => {
     const { topic, start, end, memberCount, meetingLink, isPrivate, isPublished, isbn } = req.body
-    if (!topic || !start || !end || !memberCount || !isbn) throw new Error('Field required!')
+    if (!topic || !start || !end || !memberCount || !isbn || !meetingLink) throw new Error('Field required!')
     if (memberCount < 2) throw new Error('Member count should be at least 2!')
     if (new Date(start) < new Date() || new Date(start) > new Date(end)) throw new Error('Event date should be later than now or ending time')
     return Book.findOne({ where: { isbn } })
@@ -87,8 +88,9 @@ const eventController = {
       const participated = await Participation.findOne({ where: { eventId: req.params.id, memberId: req.user.id } })
       const hosted = await Event.findOne({ where: { id: req.params.id, hostId: req.user.id } })
       if (!event || event.isPublished === false) throw new Error("Event doesn't exist!")
-      if (participated || hosted) throw new Error("You already joined the event!")
-      if (event.memberCount === event.currentMemberCount) throw new Error("The event is fully booked!")
+      // if (participated || hosted) throw new Error("You already joined the event!")
+      if (participated || hosted || (event.memberCount === event.currentMemberCount)) return res.json({"canJoin": false})
+      // if (event.memberCount === event.currentMemberCount) throw new Error("The event is fully booked!")
       return Participation.create({
         eventId: event.id,
         memberId: req.user.id
@@ -144,6 +146,38 @@ const eventController = {
           return res.json(event)
         }
       )
+      .catch(err => next(err))
+  },
+  getMemberEvents: (req, res, next) => {
+    return Participation.findAndCountAll({
+      include: [{ model: Event, as: 'Event' }],
+      attributes: ['id'],
+      where: {memberId: req.params.userId},
+      order: [['createdAt', 'DESC']]
+    })
+      .then(events => {
+        const resultEvents = events.rows.map(r => ({
+          ...r.toJSON(),
+          currentMemberCount: r.Event.length
+        }))
+        return res.json(resultEvents)
+      })
+      .catch(err => next(err))
+  },
+  getHostEvents: (req, res, next) => {
+    const bookId = req.params.bookId
+    return Event.findAndCountAll({
+      include: [{ model: User, as: 'ParticipatedUsers', attributes: ['id'] }],
+      where: { hostId:req.params.userId },
+      order: [['createdAt', 'DESC']]
+    })
+      .then(events => {
+        const resultEvents = events.rows.map(r => ({
+          ...r.toJSON(),
+          currentMemberCount: r.ParticipatedUsers.length
+        }))
+        return res.json(resultEvents)
+      })
       .catch(err => next(err))
   }
 }

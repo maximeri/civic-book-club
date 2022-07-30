@@ -29,14 +29,27 @@ const bookController = {
       .catch(err => next(err))
   },
   getUserBooks: (req, res, next) => {
-    return LikedBook.findAll({
+    return LikedBook.findAndCountAll({
+      include: [{
+        model: Book,
+        include: [
+          { model: User, as: 'LikedBookUsers', attributes: ['id'] }
+        ]
+}],
       where: { userId: req.params.userId },
       order: [['createdAt', 'DESC']]
     })
       .then(books => {
         if (!books) throw new Error('This account does not exist.')
-        return res.json(books)
-      }).catch(err => next(err))
+        const likedBookUserId = req.user?.LikedBooks ? req.user.LikedBooks.map(likeBooks => likeBooks.id) : [] // defined in config passport.js
+        const resultBooks = books.rows.map(r => ({
+          ...r.toJSON(),
+          isLiked: likedBookUserId.includes(r.bookId),
+          totalLikes: r.Book.LikedBookUsers.length
+        }))
+        return res.json(resultBooks)
+      })
+      .catch(err => next(err))
   },
   getTopBooks: (req, res, next) => {
     return Book.findAll({
