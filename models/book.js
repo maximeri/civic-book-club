@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       Book.hasMany(models.Review, { foreignKey: 'bookId' })
       Book.hasMany(models.Event, { foreignKey: 'bookId' })
       Book.belongsToMany(models.User, { through: models.LikedBook, foreignKey: 'bookId', as: 'LikedBookUsers' })
+      Book.hasMany(models.LikedBook, { foreignKey: 'bookId' })
     }
   }
   Book.init({
