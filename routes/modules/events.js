@@ -8,6 +8,8 @@ router.delete('/member/:id', eventController.unjoinEvent) // unjoin an event
 router.post('/host', eventController.addEvent) // Create an event
 router.put('/draft/:id', eventController.editEventDraft) // edit a drafted event
 router.put('/:id', eventController.editEvent) // edit a published event
+router.get('/user/member/:userId', eventController.getMemberEvents) // view all events of a member
+router.get('/user/host/:userId', eventController.getHostEvents) // view all events of a host
 router.get('/book/:bookId', eventController.getEvents) // view all events of a book
 router.get('/:id', eventController.getEvent) // view all events of a book
 
