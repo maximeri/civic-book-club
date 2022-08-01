@@ -87,9 +87,9 @@ const eventController = {
       const event = await Event.findByPk(req.params.id)
       const participated = await Participation.findOne({ where: { eventId: req.params.id, memberId: req.user.id } })
       const hosted = await Event.findOne({ where: { id: req.params.id, hostId: req.user.id } })
-      if (!event || event.isPublished === false) throw new Error("Event doesn't exist!")
-      // if (participated || hosted) throw new Error("You already joined the event!")
-      if (participated || hosted || (event.memberCount === event.currentMemberCount)) return res.json({"canJoin": false})
+      // if (!event || event.isPublished === false) throw new Error("Event doesn't exist!")
+      if (participated || hosted) throw new Error("You already joined the event!")
+      // if (participated || hosted || (event.memberCount === event.currentMemberCount)) return res.json({"canJoin": false})
       // if (event.memberCount === event.currentMemberCount) throw new Error("The event is fully booked!")
       return Participation.create({
         eventId: event.id,
