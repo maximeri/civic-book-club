@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://kit.fontawesome.com/b8a8323ae3.js" crossorigin="anonymous"></script>
+  <title>Civic Book Club</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+</head>
+
+<body>
+  <noscript>
+    <strong>We're sorry but this application doesn't work properly without
+      JavaScript enabled. Please enable it to continue.
+    </strong>
+  </noscript>
+  <div id="navbar"></div>
+  <div class="container">
+
+    <div class="row mt-5">
+      <div class="col-md-6 m-auto">
+        <div class="card card-body">
+          <h1 class="text-center mt-3">Create Event</h1>
+          <p class="text-center mt-3">*You can only create events with EXISTED books</p>
+          <form id="form" action="/api/v1/events/host" method="POST">
+            <div class="form-group">
+              <label for="isbn">*13- Digit ISBN</label>
+              <input type="number" id="isbn" name="isbn" class="form-control" placeholder="Enter 13-digit ISBN Number" readonly>
+            </div>
+            <div class="form-group">
+              <label for="topic">Topic</label>
+              <input type="text" id="topic" name="topic" class="form-control" placeholder="Topic for the meeting">
+            </div>
+            <div class="form-group">
+              <label for="start">Start Time</label>
+              <input type="datetime-local" id="start" name="start" class="form-control" placeholder="Starting time">
+            </div>
+            <div class="form-group">
+              <label for="end">End Time</label>
+              <input type="datetime-local" id="end" name="end" class="form-control" placeholder="Ending time">
+            </div>
+            <div class="form-group">
+              <label for="memberCount">Member Count</label>
+              <input min="2" type="number" id="memberCount" name="memberCount" class="form-control"
+                placeholder="No less than 2 members">
+            </div>
+            <div class="form-group">
+              <label for="meetingLink">Meeting URL</label>
+              <span>
+                (get <a href="https://meet.google.com/" target="_blank">link</a>)
+              </span>
+              <input type="url" id="meetingLink" name="meetingLink" class="form-control"
+                placeholder="Ex: google meet link...">
+            </div>
+            <div class="form-group">
+              <input type="radio" id="isPrivate" name="isPrivate" value="false" hidden>
+              <input type="radio" id="isPublished" name="isPublished" value="true" hidden>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Create Event</button>
+          </form>
+          <p class="lead mt-4">
+            Can't find the book? <a href="/addEvent.html">Create a book</a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+  <script src="Navbar.js"></script>
+  <!-- <script src="addEvent.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+    crossorigin="anonymous"></script>
+  <script>
+    // get current user
+      let currentUserId = ''
+      let requestCurrentUserPromise = new Promise((resolve, reject) => {
+        const token = localStorage.getItem('access_token')
+        const config = {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+        axios.get(`http://localhost:3000/api/v1/get_current_user`, config)
+          .then((response) => {
+            // console.log(response.data.currentUser.id)
+            resolve(response.data.currentUser)
+            // return response.data.currentUser
+          })
+          .catch((err) => console.log(err))
+      })
+
+      function returnCurrentUserId(id) {
+        currentUserId = id
+      }
+
+      requestCurrentUserPromise.then(function (currentUser) {
+        returnCurrentUserId(currentUser.id)
+      })
+
+  let params = new URLSearchParams(document.location.search)
+  let bookIsbn = parseInt(params.get("bookIsbn"), 10)
+    document.querySelector('input[name="isbn"]').value = `${bookIsbn}`
+    const form = document.getElementById('form');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault()
+      const formData = new FormData(form)
+      // Convert formData object to URL-encoded string:
+      const payload = new URLSearchParams(formData)
+      // Post the payload using Fetch:
+      const token = localStorage.getItem('access_token')
+      fetch('http://localhost:3000/api/v1/events/host', {
+        method: 'POST',
+        body: payload,
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.json())
+        .then(res => {
+          console.log(res)
+          window.location.href = `/user.html?userId=${currentUserId}`
+        })
+    })
+
+
+  </script>
+</body>
+
+</html>
