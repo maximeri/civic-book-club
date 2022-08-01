@@ -11,7 +11,7 @@ function jsDate(isoFormatDateString) {
   if (month < 10) {
     month = '0' + month;
   }
-  return [year, month, dt]
+  return `${year}-${month}-${dt}`
 }
 
 module.exports = jsDate 
