@@ -5,9 +5,9 @@ function renderNavbar() {
     const config = { headers: { Authorization: `Bearer ${token}` } }
     axios.get(`http://localhost:3000/api/v1/get_current_user`, config)
     .then((response) => {
-      return response.data.currentUser.id
+      return response.data.currentUser
     })
-      .then(userId => {
+      .then(currentUser => {
         const template = document.querySelector('#navbar')
         let rawHTML = `
       <nav class="navbar navbar-expand-lg navbar-light">
@@ -19,13 +19,21 @@ function renderNavbar() {
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="user.html?userId=${userId}">My Events</a>
+          <a class="nav-link" href="user.html?userId=${currentUser.id}">My Event <i class="fa-solid fa-calendar-check"></i></a>
+        </li>
+         </li>
+          <li class="nav-item">
+          <a class="nav-link" href="message.html?username=${currentUser.name}&avatar=${currentUser.avatar}">Message <i class="fa-solid fa-comment"></i></a>
+        </li>
+         </li>
+          <li class="nav-item">
+          <a class="nav-link" href="room.html?username=${currentUser.name}&avatar=${currentUser.avatar}">Chat Room <i class="fa-solid fa-comments"></i></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="addEvent.html">+ Event</a>
+          <a class="nav-link" href="addEvent.html"><i class="fa-solid fa-plus"></i> Event</a>
         </li>
           <li class="nav-item">
-          <a class="nav-link" href="addBook.html">+ Book</a>
+          <a class="nav-link" href="addBook.html"><i class="fa-solid fa-plus"></i> Book</a>
         </li>
         <li class="nav-item">
           <button id="logout" onclick="logout()"class="btn my-sm-0 my-2">Logout</button>
