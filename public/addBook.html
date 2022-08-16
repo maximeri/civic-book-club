@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://kit.fontawesome.com/b8a8323ae3.js" crossorigin="anonymous"></script>
   <title>Civic Book Club</title>
+  <link rel="icon" type="image/x-icon" href="/asset/book.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
     integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
@@ -52,7 +53,6 @@
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
   <script src="Navbar.js"></script>
-  <script src="addBook.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
@@ -83,7 +83,9 @@
       requestCurrentUserPromise.then(function (currentUser) {
         returnCurrentUserId(currentUser.id)
       })
-
+      const isbnInput = document.getElementById('isbn')
+      const nameInput = document.getElementById('name')
+      const introductionInput = document.getElementById('introduction')
       const form = document.getElementById('form')
       form.addEventListener('submit', function (e) {
         e.preventDefault()
@@ -91,19 +93,31 @@
         var input = document.querySelector('input[type=file]')
         formData.append('image', input.files[0])
         const payload = new URLSearchParams(formData)
-        // Post the payload using Fetch:
         const token = localStorage.getItem('access_token')
-        fetch('http://localhost:3000/api/v1/books', {
+          if (isbnInput.value === '' || nameInput.value === '' || introductionInput.value === '') {
+            alert('Field required!')
+            return
+          } else {
+            fetch('http://localhost:3000/api/v1/books', {
           method: 'POST',
           body: payload,
           headers: { Authorization: `Bearer ${token}` }
         })
-          .then(res => res.json())
           .then(res => {
-            if(Error) {alert(`${res.message}`)} else {
-              window.location.href = `/user.html?userId=${currentUserId}`
+            if (res.ok) {
+              return res.json()
             }
-          })
+            alert('Book already exists')
+            throw new Error('Book already exists')
+          }
+          )
+          .then((res) => {
+                 window.location.href = `/index.html`
+              })
+              .catch((error) => {
+                console.log(error)
+              })
+          }
       })
 
     </script>
