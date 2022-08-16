@@ -8,8 +8,6 @@ function generateEvents() {
       start_at: new Date(),
       end_at: new Date(),
       memberCount: `${Math.floor(1 + Math.random() * 9)}`,
-      isPublished: true,
-      isPrivate: false,
       host_id: `${Math.floor(1 + Math.random() * 25)}`,
       book_id: `${Math.floor(1 + Math.random() * 5)}`,
       created_at: new Date(),
