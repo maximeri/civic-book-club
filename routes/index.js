@@ -7,6 +7,7 @@ const friendships = require('./modules/friendships')
 const books = require('./modules/books')
 const events = require('./modules/events')
 const reviews = require('./modules/reviews')
+const sockets = require('./modules/sockets')
 const { authenticated } = require('../middleware/auth')
 const userController = require('../controllers/user-controller')
 
@@ -19,6 +20,7 @@ router.use('/friendships', authenticated, friendships)
 router.use('/books', authenticated, books)
 router.use('/events', authenticated, events)
 router.use('/reviews', authenticated, reviews)
+router.use('/sockets', authenticated, sockets)
 router.use('/', apiErrorHandler)
 
 module.exports = router
