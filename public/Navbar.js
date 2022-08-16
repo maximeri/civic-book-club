@@ -23,11 +23,11 @@ function renderNavbar() {
         </li>
          </li>
           <li class="nav-item">
-          <a class="nav-link" href="message.html?username=${currentUser.name}&avatar=${currentUser.avatar}">Message <i class="fa-solid fa-comment"></i></a>
+          <a class="nav-link" href="privatePage.html?userId=${currentUser.id}&username=${currentUser.name}&avatar=${currentUser.avatar}">Message <i class="fa-solid fa-comment"></i></a>
         </li>
          </li>
           <li class="nav-item">
-          <a class="nav-link" href="room.html?username=${currentUser.name}&avatar=${currentUser.avatar}">Chat Room <i class="fa-solid fa-comments"></i></a>
+          <a class="nav-link" href="publicRoom.html?room=public&userId=${currentUser.id}&username=${currentUser.name}&avatar=${currentUser.avatar}">Chat Room <i class="fa-solid fa-comments"></i></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="addEvent.html"><i class="fa-solid fa-plus"></i> Event</a>
@@ -39,10 +39,6 @@ function renderNavbar() {
           <button id="logout" onclick="logout()"class="btn my-sm-0 my-2">Logout</button>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Find a book..." aria-label="Search">
-        <button class="btn my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-      </form>
     </div>
   </nav>
   `
@@ -65,10 +61,6 @@ function renderNavbar() {
           <a class="nav-link" href="login.html">Login</a>
         </li>
       </ul>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Find a book..." aria-label="Search">
-        <button class="btn my-2 my-sm-0" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-      </form>
     </div>
   </nav>
   `
@@ -81,6 +73,7 @@ function logout() {
   localStorage.removeItem('access_token')
   window.location.href = "http://localhost:3000/login.html"
 }
+
 
 // DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
