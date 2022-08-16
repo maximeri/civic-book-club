@@ -26,15 +26,15 @@ app.use((req, res, next) => {
   next()
 })
 app.use('/api/v1', routes)
-app.use(express.static('public'))
+app.use(express.static('client/public/'))
 
 // Socket.io
 app.get('/publicRoom.html', (req, res) => { 
-  res.sendFile(__dirname + '/public/room.html')
+  res.sendFile(__dirname + '/client/public/room.html')
 })
 
 app.get('/privateRoom.html', (req, res) => { 
-  res.sendFile(__dirname + '/public/message.html') 
+  res.sendFile(__dirname + '/client/public/message.html') 
 })
 
 server.listen(port, () => console.log(`App is listening on port ${port}!`))
