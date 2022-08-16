@@ -45,7 +45,7 @@
     </strong>
   </noscript>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-  <script src="Navbar.js"></script>
+  <script src="./components/Navbar.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
@@ -66,23 +66,23 @@
       }
       try {
         fetch('http://localhost:3000/api/v1/users/login', {
-        method: 'POST',
-        body: payload,
-      })
-        .then(res => {
-          if(res.ok) {
-            return res.json()
-          } else {
-            alert('incorect account or password')
-            throw 'incorect account or password'
-          }
+          method: 'POST',
+          body: payload,
         })
-        .then(res => {
-          localStorage.setItem('access_token', res.token)
-          window.location.href = "http://localhost:3000/index.html"
-        })
+          .then(res => {
+            if (res.ok) {
+              return res.json()
+            } else {
+              alert('incorect account or password')
+              throw 'incorect account or password'
+            }
+          })
+          .then(res => {
+            localStorage.setItem('access_token', res.token)
+            window.location.href = "http://localhost:3000/index.html"
+          })
       }
-      catch(error) {
+      catch (error) {
         return error
       }
     })

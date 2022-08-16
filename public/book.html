@@ -8,7 +8,7 @@
   <title>Civic Book Club</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
     integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
-    <link rel="stylesheet" href="index.css">
+  <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
@@ -21,50 +21,51 @@
   <div id="navbar"></div>
   <div class="container">
     <!-- book -->
-  <div id="book" class="m-3"></div>
-  <!-- button modals -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add review</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="review-form">
-          <div class="form-group">
-            <label for="title" class="col-form-label">Title:</label>
-            <input type="text" class="form-control" name="title" id="title">
+    <div id="book" class="m-3"></div>
+    <!-- button modals -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add review</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div class="form-group">
-            <label for="content" class="col-form-label">Content:</label>
-            <textarea class="form-control" name="content" id="content"></textarea>
+          <div class="modal-body">
+            <form id="review-form">
+              <div class="form-group">
+                <label for="title" class="col-form-label">Title:</label>
+                <input type="text" class="form-control" name="title" id="title">
+              </div>
+              <div class="form-group">
+                <label for="content" class="col-form-label">Content:</label>
+                <textarea class="form-control" name="content" id="content"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button onclick="submitReview()" type="submit" class="btn btn-primary" data-toggle="tooltip"
+                  data-placement="top" title="All fields required!">Submit</button>
+              </div>
+            </form>
           </div>
-          <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button onclick="submitReview()" type="submit" class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="All fields required!">Submit</button>
+        </div>
       </div>
-        </form>
-      </div>
-    </div>
-  </div>
 
-<!-- events -->
-  </div>
-  <h5 class="text-center mt-5">Events</h3>
-    <hr class="my-4">
-  <div class="row" id="events"></div>
-  <!-- reviews -->
-  <h5 class="text-center mt-5">Reviews</h3>
-    <hr class="my-4">
-    <div class="" id="reviews"></div>
+      <!-- events -->
+    </div>
+    <h5 class="text-center mt-5">Events</h3>
+      <hr class="my-4">
+      <div class="row" id="events"></div>
+      <!-- reviews -->
+      <h5 class="text-center mt-5">Reviews</h3>
+        <hr class="my-4">
+        <div class="" id="reviews"></div>
 
   </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
-  <script src="Navbar.js"></script>
+  <script src="./components/Navbar.js"></script>
   <script src="Book.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -72,31 +73,31 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
     crossorigin="anonymous"></script>
-    <script>
-function submitReview() {
-  const form = document.getElementById('review-form');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault()
-    const formData = new FormData(form)
-    // Convert formData object to URL-encoded string:
-    const payload = new URLSearchParams(formData)
-    // Post the payload using Fetch:
-    const token = localStorage.getItem('access_token')
-    let params = new URLSearchParams(document.location.search)
-    let bookId = parseInt(params.get("bookId"), 10)
-    fetch(`http://localhost:3000/api/v1/reviews/${bookId}`, {
-      method: 'POST',
-      body: payload,
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(res => {
-        location.reload()
+  <script>
+    function submitReview() {
+      const form = document.getElementById('review-form');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault()
+        const formData = new FormData(form)
+        // Convert formData object to URL-encoded string:
+        const payload = new URLSearchParams(formData)
+        // Post the payload using Fetch:
+        const token = localStorage.getItem('access_token')
+        let params = new URLSearchParams(document.location.search)
+        let bookId = parseInt(params.get("bookId"), 10)
+        fetch(`http://localhost:3000/api/v1/reviews/${bookId}`, {
+          method: 'POST',
+          body: payload,
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(res => res.json())
+          .then(res => {
+            location.reload()
+          })
       })
-  })
-}
-        
-    </script>
+    }
+
+  </script>
 </body>
 
 </html>
