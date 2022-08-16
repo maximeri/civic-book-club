@@ -86,3 +86,7 @@ span {
   width: 1100px;
   height: 200px;
 }
+
+.hide {
+  display: none;
+}
