@@ -1,3 +1,9 @@
+let cards = [] // books
+const token = localStorage.getItem('access_token')
+const config = {
+  headers: { Authorization: `Bearer ${token}` }
+}
+
 // carousel
 function renderCarousel(data) {
   const template = document.querySelector('.carousel-inner')
@@ -17,10 +23,6 @@ function renderCarousel(data) {
 }
 
 function requestCarousel() {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   const carousels = []
   axios.get('http://localhost:3000/api/v1/books/top10', config)
     .then((response) => {
@@ -72,11 +74,6 @@ function renderBooks(data) {
 }
 
 function requestBooks() {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
-  const cards = []
   axios.get('http://localhost:3000/api/v1/books', config)
     .then((response) => {
       cards.push(...response.data)
@@ -87,10 +84,6 @@ function requestBooks() {
 
 // book
 function requestBook() {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   let params = new URLSearchParams(document.location.search)
   let bookId = parseInt(params.get("bookId"), 10)
   axios.get(`http://localhost:3000/api/v1/books/${bookId}`, config)
@@ -106,16 +99,40 @@ document.addEventListener('DOMContentLoaded', () => {
   requestBooks()
 })
 
+
 // like book
-window.onload = function () {
-  const token = localStorage.getItem('access_token')
-  document.addEventListener('submit', function (e) {
+window.onload = () => {
+var likeBookForms = document.getElementsByClassName("likeBook")
+for (var i = 0; i < likeBookForms.length; i++) {
+  likeBookForms[i].addEventListener('submit', (e) => {
     e.preventDefault()
     fetch(`http://localhost:3000/api/v1/books/${e.target.id}`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}` }
-  })
-    .then(response => location.reload())
-    .catch((err) => console.log(err))
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(response => location.reload())
+      .catch((err) => console.log(err))
   })
 }
+}
+
+// search-bar
+const searchInput = document.getElementById('search-input')
+const searchForm = document.getElementById('search-form')
+searchForm.addEventListener("submit", e => {
+  e.preventDefault()
+  const keyword = searchInput.value.toLowerCase()
+  if (!keyword.length) {
+    return alert('please enter valid name or isbn')
+  }
+  let filteredCards = []
+  filteredCards = cards.filter((card) =>
+    card.name.toLowerCase().includes(keyword) ||
+    card.isbn.includes(keyword)
+  )
+  if (filteredCards.length === 0) {
+    return alert(`No matching result for "${keyword}"`)
+  }
+  renderBooks(filteredCards)
+})
+
