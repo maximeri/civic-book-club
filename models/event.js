@@ -17,8 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     endAt: DataTypes.DATE,
     memberCount: DataTypes.INTEGER,
     meetingLink: DataTypes.STRING,
-    isPublished: DataTypes.BOOLEAN,
-    isPrivate: DataTypes.BOOLEAN,
     currentMemberCount: DataTypes.INTEGER,
     hostId: DataTypes.INTEGER,
     bookId: DataTypes.INTEGER
