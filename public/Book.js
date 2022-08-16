@@ -1,3 +1,7 @@
+const token = localStorage.getItem('access_token')
+const config = {
+  headers: { Authorization: `Bearer ${token}` }
+}
 // get current user
 let currentUserId = ''
 let requestCurrentUserPromise = new Promise((resolve, reject) => {
@@ -38,12 +42,25 @@ function renderNoSeat(seats) {
   }
 }
 
+// render expired events
+function disabledExpireEvent(time) {
+  time = new Date(time)
+  const today = new Date()
+  const parsedTime = Date.parse(time)
+  const parsedToday = Date.parse(today)
+  if (parsedTime <= parsedToday) {
+    return 'disabled'
+  } else {
+    return null
+  }
+}
+
 // disable participated user to join
 function renderDisabledParticipatedUser(participatedUsers) {
   let userIds = []
   participatedUsers.forEach(e => userIds.push(e.id))
   const equalsCurrentUserId = (element) => element === currentUserId
-  console.log('0000000', userIds, currentUserId, userIds.some(equalsCurrentUserId) )
+  // console.log('0000000', userIds, currentUserId, userIds.some(equalsCurrentUserId) )
   if (userIds.some(equalsCurrentUserId)) {
     return 'disabled'
   } else {
@@ -71,10 +88,6 @@ function hideDeleteBtn(userId) {
 
 // book
 function requestBook() {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   let params = new URLSearchParams(document.location.search)
   let bookId = parseInt(params.get("bookId"), 10)
   axios.get(`http://localhost:3000/api/v1/books/${bookId}`, config)
@@ -114,11 +127,11 @@ function renderEvents(data) {
         <div class="card-body" id="event-card-body">
           <h5 class="card-title"><a style="display: inline; vertical-align: middle;" href="/book.html?id=${item.id}">${item.topic}</a></h5>
           <p>${item.memberCount} members</p>
-          <p class="font-bold text-wrap">${new Date(item.startAt).toLocaleString()}</p>
+          <p class="font-bold text-wrap">${new Date(item.startAt).toLocaleString() }</p>
         </div>
         <div class="card-footer">
-          <form id="${item.id}" action="./events/member/${item.id}" method="POST" style="display: inline;">
-          <button onclick="joinEvent()" class="btn btn-outline-success" type="submit" ${renderDisabledParticipatedUser(item.ParticipatedUsers) } ${renderDisabledHost(item.hostId)} ${renderNoSeat(item.memberCount - item.currentMemberCount) }>Join Now</button>
+          <form class="event-form" id="${item.id}" action="./events/member/${item.id}" method="POST" style="display: inline;">
+          <button onclick="joinEvent()" class="btn btn-outline-success" type="submit" ${renderDisabledParticipatedUser(item.ParticipatedUsers)} ${renderDisabledHost(item.hostId)} ${renderNoSeat(item.memberCount - item.currentMemberCount)} ${disabledExpireEvent(item.startAt)}>Join Now</button>
           <span class="font-weight-light text-right">${item.memberCount - item.currentMemberCount} seats left</span>
         </form>
         </div>
@@ -135,10 +148,6 @@ function renderEvents(data) {
 function requestEvents() {
   let params = new URLSearchParams(document.location.search)
   let bookId = parseInt(params.get("bookId"), 10)
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   const events = []
   axios.get(`http://localhost:3000/api/v1/events/book/${bookId}`, config)
     .then((response) => {
@@ -172,11 +181,11 @@ function renderReviews(data) {
     <div class="row m-1">
     <img id="avatar-review" src="${item.User.avatar}" alt="${item.User.name}">
     <a href="user.html?userId=${item.User.id}" class="card-link mt-2">&ensp;${item.User.name}</a>
-    <form id="${item.id}" action="./books/${item.id}" method="POST">
+    <form class="review-form" id="${item.id}" action="./books/${item.id}" method="POST">
           <button onclick="likeReview()" class="btn btn-like-book" type="submit"><i class="${renderLike(item.isLiked)} fa-heart"></i>&ensp;${item.totalLikes}</button>
           </form>
           <form id="${item.id}" action="./reviews/${item.id}" method="DELETE">
-           <button onclick="deleteReview()" class="btn btn-outline-danger" type="submit" ${hideDeleteBtn(item.User.id) }>Delete</button>
+           <button onclick="deleteReview()" class="btn btn-outline-danger" type="submit" ${hideDeleteBtn(item.User.id)}>Delete</button>
           </form>
   </div>
   </div>
@@ -189,7 +198,6 @@ function renderReviews(data) {
 
 function deleteReview() {
   if (confirm("Are you sure you want to delete this review?")) {
-    const token = localStorage.getItem('access_token')
     document.addEventListener('submit', function (e) {
       e.preventDefault()
       fetch(`http://localhost:3000/api/v1/reviews/${e.target.id}`, {
@@ -205,10 +213,6 @@ function deleteReview() {
 }
 
 function requestReviews() {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   let params = new URLSearchParams(document.location.search)
   let bookId = parseInt(params.get("bookId"), 10)
   const reviews = []
@@ -222,7 +226,6 @@ function requestReviews() {
 
 // like review
 function likeReview() {
-  const token = localStorage.getItem('access_token')
   document.addEventListener('submit', function (e) {
     e.preventDefault()
     fetch(`http://localhost:3000/api/v1/reviews/user/${e.target.id}`, {
@@ -236,19 +239,18 @@ function likeReview() {
 
 // join event
 function joinEvent() {
-  const token = localStorage.getItem('access_token')
-  document.addEventListener('submit', function (e) {
-    e.preventDefault()
-    console.log('njdkncvasdjv',e.target.id)
-    fetch(`http://localhost:3000/api/v1/events/member/${e.target.id}`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => {
-        location.reload()
+  var eventForms = document.getElementsByClassName("event-form")
+  for (var i = 0; i < eventForms.length; i++) {
+    eventForms[i].addEventListener('submit', function (e) {
+      e.preventDefault()
+      fetch(`http://localhost:3000/api/v1/events/member/${e.target.id}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
       })
-      .catch((err) => console.log(err))
-  })
+        .then(response => location.reload())
+        .catch((err) => console.log(err))
+    })
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
