@@ -26,6 +26,7 @@ app.use((req, res, next) => {
   next()
 })
 app.use('/api/v1', routes)
+app.use(express.static('client/src/'))
 app.use(express.static('client/public/'))
 
 // Socket.io
