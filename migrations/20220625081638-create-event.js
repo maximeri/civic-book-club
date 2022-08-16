@@ -25,17 +25,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       current_member_count: {
+        allowNull: false,
         type: Sequelize.INTEGER,
         defaultValue: 1
       },
       meeting_link: {
+        allowNull: false,
         type: Sequelize.STRING
-      },
-      is_published: {
-        type: Sequelize.BOOLEAN
-      },
-      is_private: {
-        type: Sequelize.BOOLEAN
       },
       host_id: {
         allowNull: false,
