@@ -1,10 +1,10 @@
+const token = localStorage.getItem('access_token')
+const config = {
+  headers: { Authorization: `Bearer ${token}` }
+}
 // get current user
 let currentUserId = ''
 let requestCurrentUserPromise = new Promise((resolve, reject) => {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   axios.get(`http://localhost:3000/api/v1/get_current_user`, config)
     .then((response) => {
       // console.log(response.data.currentUser.id)
@@ -27,6 +27,19 @@ function getUserId() {
   let params = new URLSearchParams(document.location.search)
   let userId = parseInt(params.get("userId"), 10)
   return userId
+}
+
+// render expired events
+function disabledExpireEvent(time) {
+  time = new Date(time)
+  const today = new Date()
+  const parsedTime = Date.parse(time)
+  const parsedToday = Date.parse(today)
+  if (parsedTime <= parsedToday) {
+    return 'disabled'
+  } else {
+    return null
+  }
 }
 
 // disable fully booked
@@ -69,10 +82,6 @@ function renderHidden() {
 
 // user
 function requestUser() {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   axios.get(`http://localhost:3000/api/v1/users/${getUserId() }`, config)
     .then((response) => {
       renderUser(response.data)
@@ -82,17 +91,23 @@ function requestUser() {
 
 function renderUser(data) {
   const template = document.querySelector('#user')
-  let rawHTML = ''
+    axios.get(`http://localhost:3000/api/v1/get_current_user`, config)
+      .then((response) => {
+        return response.data.currentUser
+      }).then(currentUser => {
+        let rawHTML = ''
   rawHTML +=
     `
   <div class="container">
   <img id="avatar-user" src="${data.avatar}" class="img-thumbnail" alt="${data.name}">
-    <h1 class="display-4">${data.name}</h1>
+    <h1 class="display-4">${data.name} <a class="btn btn-outline-dark" href="privatePage.html?userId=${currentUser.id}&user2id=${data.id}&username=${currentUser.name}&user2name=${data.name}&avatar=${currentUser.avatar}&user2avatar=${data.avatar}">Message <i class="fa-solid fa-comment"></i></a></h1>
+     
     <p class="lead">${data.job}</p>
     <p>${data.preference}</p>
 </div>
     `
-  template.innerHTML = rawHTML
+        template.innerHTML = rawHTML
+      })
 }
 
 // member events
@@ -111,9 +126,9 @@ function renderMemberEvents(data) {
           <p class="font-bold text-wrap">${new Date(item.Event.startAt).toLocaleString()}</p>
         </div>
         <div class="card-footer">
-          <form id="${item.id}" action="" method="POST" style="display: inline;">
+          <form class="event-form" id="${item.id}" action="" method="POST" style="display: inline;">
           <a href="${item.Event.meetingLink}" class="btn btn-outline-success" ${renderEnterRoom()}>Enter Room</a>
-          <button id="${item.id}"onclick="joinEvent()" class="btn btn-outline-success" ${renderHidden()} ${renderDisabledHost(item.Event.hostId)}type="submit" ${renderNoSeat(item.Event.memberCount - item.Event.currentMemberCount)}>Join Now</button>
+          <button id="${item.id}"onclick="joinEvent()" class="btn btn-outline-success" ${renderHidden()} ${renderDisabledHost(item.Event.hostId)}type="submit" ${renderNoSeat(item.Event.memberCount - item.Event.currentMemberCount)} ${disabledExpireEvent(item.Event.startAt) }>Join Now</button>
           <span class="font-weight-light text-right">${item.Event.memberCount - item.Event.currentMemberCount} seats left</span>
         </form>
         </div>
@@ -128,10 +143,6 @@ function renderMemberEvents(data) {
 function requestMemberEvents() {
   const params = new URLSearchParams(document.location.search);
   const userId = parseInt(params.get("userId"), 10)
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   const events = []
   axios.get(`http://localhost:3000/api/v1/events/user/member/${userId}`, config)
     .then((response) => {
@@ -157,9 +168,9 @@ function renderHostEvents(data) {
           <p class="font-bold text-wrap">${new Date(item.startAt).toLocaleString()}</p>
         </div>
         <div class="card-footer">
-          <form id="${item.id}" action="./events/member/${item.id}" method="POST" style="display: inline;">
+          <form class="event-form" id="${item.id}" action="./events/member/${item.id}" method="POST" style="display: inline;">
            <a href="${item.meetingLink}" class="btn btn-outline-success" ${renderEnterRoom()}>Enter Room</a>
-          <button id="${item.id}" onclick="joinEvent()" class="btn btn-outline-success" type="submit"${renderHidden()} ${renderDisabledHost(item.hostId)} ${renderNoSeat(item.memberCount - item.currentMemberCount)}>Join Now</button>
+          <button id="${item.id}" onclick="joinEvent()" class="btn btn-outline-success" type="submit"${renderHidden()} ${renderDisabledHost(item.hostId)} ${renderNoSeat(item.memberCount - item.currentMemberCount)} ${disabledExpireEvent(item.startAt) }>Join Now</button>
           <span class="font-weight-light text-right">${item.memberCount - item.currentMemberCount} seats left</span>
         </form>
         </div>
@@ -174,10 +185,6 @@ function renderHostEvents(data) {
 function requestHostEvents() {
   const params = new URLSearchParams(document.location.search);
   const userId = parseInt(params.get("userId"), 10)
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   const events = []
   axios.get(`http://localhost:3000/api/v1/events/user/host/${userId}`, config)
     .then((response) => {
@@ -203,10 +210,9 @@ function hideDeleteBtn(userId) {
     return null
   }
 }
-
+// Delete review
 function deleteReview() {
   if (confirm("Are you sure you want to delete this review?")) {
-    const token = localStorage.getItem('access_token')
   document.addEventListener('submit', function (e) {
     e.preventDefault()
     fetch(`http://localhost:3000/api/v1/reviews/${e.target.id}`, {
@@ -220,7 +226,7 @@ function deleteReview() {
     console.log("You pressed Cancel!")
   }
 }
-
+// Render reviews
 function renderReviews(data) {
   const template = document.querySelector('#reviews')
   let rawHTML = ''
@@ -249,11 +255,8 @@ function renderReviews(data) {
   template.innerHTML += rawHTML
 }
 
+// Request reviews
 function requestReviews() {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   let params = new URLSearchParams(document.location.search)
   let userId = parseInt(params.get("userId"), 10)
   const reviews = []
@@ -265,14 +268,14 @@ function requestReviews() {
     .catch((err) => console.log(err))
 }
 
-// books
+// Render like 
 function renderLike(like) {
   if (like) return `fa-solid`
   else {
     return `fa-regular`
   }
 }
-
+// Render books
 function renderBooks(data) {
   const template = document.querySelector('#books')
   let rawHTML = ''
@@ -306,11 +309,8 @@ function renderBooks(data) {
   template.innerHTML += rawHTML
 }
 
+// Request books
 function requestBooks() {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
   const cards = []
   axios.get(`http://localhost:3000/api/v1/books/user/${getUserId()}`, config)
     .then((response) => {
@@ -322,7 +322,6 @@ function requestBooks() {
 
 // like review
 function likeReview() {
-  const token = localStorage.getItem('access_token')
   document.addEventListener('submit', function (e) {
     e.preventDefault()
     fetch(`http://localhost:3000/api/v1/reviews/user/${e.target.id}`, {
@@ -335,32 +334,35 @@ function likeReview() {
 }
 
 // like book
-window.onload = function () {
-  const token = localStorage.getItem('access_token')
-  document.addEventListener('submit', function (e) {
+window.onload = () => {
+  var likeBookForms = document.getElementsByClassName("likeBook")
+  for (var i = 0; i < likeBookForms.length; i++) {
+    likeBookForms[i].addEventListener('submit', (e) => {
+      e.preventDefault()
+      fetch(`http://localhost:3000/api/v1/books/${e.target.id}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(response => location.reload())
+        .catch((err) => console.log(err))
+    })
+  }
+}
+
+// join event
+function joinEvent() {
+  var eventForms = document.getElementsByClassName("event-form")
+  for (var i = 0 ; i < eventForms.length ; i++) {
+    eventForms[i].addEventListener('submit', function (e) {
     e.preventDefault()
-    fetch(`http://localhost:3000/api/v1/books/${e.target.id}`, {
+    fetch(`http://localhost:3000/api/v1/events/member/${e.target.id}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(response => location.reload())
       .catch((err) => console.log(err))
   })
-}
-
-// join event
-function joinEvent() {
-  const token = localStorage.getItem('access_token')
-  document.addEventListener('submit', function (e) {
-    e.preventDefault()
-    console.log(e.target.id)
-    fetch(`http://localhost:3000/api/v1/events/member/${e.target.id}`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(response => console.log(e.target.id))
-      .catch((err) => console.log(err))
-  })
+  }
 }
 
 
