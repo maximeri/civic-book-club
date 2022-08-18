@@ -1,4 +1,6 @@
-# Dotenv environment variables file
+node_modules/ 
+temp/
+upload/
+
+.DS_Store
 .env
-# Dependency directories
-node_modules/
