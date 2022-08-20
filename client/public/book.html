@@ -85,7 +85,7 @@
         const token = localStorage.getItem('access_token')
         let params = new URLSearchParams(document.location.search)
         let bookId = parseInt(params.get("bookId"), 10)
-        fetch(`http://localhost:3000/api/v1/reviews/${bookId}`, {
+        fetch(`${baseUrl}/reviews/${bookId}`, {
           method: 'POST',
           body: payload,
           headers: { Authorization: `Bearer ${token}` }

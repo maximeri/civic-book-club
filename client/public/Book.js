@@ -1,7 +1,12 @@
+const apiHost = 'localhost'
+const port = '3000'
+const baseUrl = `http://${apiHost}:${3000}/api/v1`
 const token = localStorage.getItem('access_token')
 const config = {
   headers: { Authorization: `Bearer ${token}` }
 }
+
+
 // get current user
 let currentUserId = ''
 let requestCurrentUserPromise = new Promise((resolve, reject) => {
@@ -9,7 +14,7 @@ let requestCurrentUserPromise = new Promise((resolve, reject) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` }
   }
-  axios.get(`http://localhost:3000/api/v1/get_current_user`, config)
+  axios.get(`${baseUrl}/get_current_user`, config)
     .then((response) => {
       // console.log(response.data.currentUser.id)
       resolve(response.data.currentUser)
@@ -90,7 +95,7 @@ function hideDeleteBtn(userId) {
 function requestBook() {
   let params = new URLSearchParams(document.location.search)
   let bookId = parseInt(params.get("bookId"), 10)
-  axios.get(`http://localhost:3000/api/v1/books/${bookId}`, config)
+  axios.get(`${baseUrl}/books/${bookId}`, config)
     .then((response) => {
       renderBook(response.data)
     })
@@ -127,7 +132,7 @@ function renderEvents(data) {
         <div class="card-body" id="event-card-body">
           <h5 class="card-title"><a style="display: inline; vertical-align: middle;" href="/book.html?id=${item.id}">${item.topic}</a></h5>
           <p>${item.memberCount} members</p>
-          <p class="font-bold text-wrap">${new Date(item.startAt).toLocaleString() }</p>
+          <p class="font-bold text-wrap">${new Date(item.startAt).toLocaleString()}</p>
         </div>
         <div class="card-footer">
           <form class="event-form" id="${item.id}" action="./events/member/${item.id}" method="POST" style="display: inline;">
@@ -149,7 +154,7 @@ function requestEvents() {
   let params = new URLSearchParams(document.location.search)
   let bookId = parseInt(params.get("bookId"), 10)
   const events = []
-  axios.get(`http://localhost:3000/api/v1/events/book/${bookId}`, config)
+  axios.get(`${baseUrl}/events/book/${bookId}`, config)
     .then((response) => {
       // let test = response.data.forEach(e => e.ParticipatedUsers.forEach(ee => console.log(ee.id)))
       events.push(...response.data)
@@ -200,7 +205,7 @@ function deleteReview() {
   if (confirm("Are you sure you want to delete this review?")) {
     document.addEventListener('submit', function (e) {
       e.preventDefault()
-      fetch(`http://localhost:3000/api/v1/reviews/${e.target.id}`, {
+      fetch(`${baseUrl}/reviews/${e.target.id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       })
@@ -216,7 +221,7 @@ function requestReviews() {
   let params = new URLSearchParams(document.location.search)
   let bookId = parseInt(params.get("bookId"), 10)
   const reviews = []
-  axios.get(`http://localhost:3000/api/v1/reviews/${bookId}`, config)
+  axios.get(`${baseUrl}/reviews/${bookId}`, config)
     .then((response) => {
       reviews.push(...response.data)
       renderReviews(reviews)
@@ -228,7 +233,7 @@ function requestReviews() {
 function likeReview() {
   document.addEventListener('submit', function (e) {
     e.preventDefault()
-    fetch(`http://localhost:3000/api/v1/reviews/user/${e.target.id}`, {
+    fetch(`${baseUrl}/reviews/user/${e.target.id}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` }
     })
@@ -243,7 +248,7 @@ function joinEvent() {
   for (var i = 0; i < eventForms.length; i++) {
     eventForms[i].addEventListener('submit', function (e) {
       e.preventDefault()
-      fetch(`http://localhost:3000/api/v1/events/member/${e.target.id}`, {
+      fetch(`${baseUrl}/events/member/${e.target.id}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       })

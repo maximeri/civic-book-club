@@ -1,12 +1,15 @@
+const apiHost = 'localhost'
+const port = '3000'
+const baseUrl = `http://${apiHost}:${3000}/api/v1`
 // navbar
 function renderNavbar() {
   const token = localStorage.getItem('access_token')
   if (token) {
     const config = { headers: { Authorization: `Bearer ${token}` } }
-    axios.get(`http://localhost:3000/api/v1/get_current_user`, config)
-    .then((response) => {
-      return response.data.currentUser
-    })
+    axios.get(`${baseUrl}/get_current_user`, config)
+      .then((response) => {
+        return response.data.currentUser
+      })
       .then(currentUser => {
         const template = document.querySelector('#navbar')
         let rawHTML = `
@@ -71,7 +74,7 @@ function renderNavbar() {
 // logout
 function logout() {
   localStorage.removeItem('access_token')
-  window.location.href = "http://localhost:3000/login.html"
+  window.location.href = `${baseUrl}/login.html`
 }
 
 

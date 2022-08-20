@@ -1,4 +1,7 @@
 let cards = [] // books
+const apiHost = 'localhost'
+const port = '3000'
+const baseUrl = `http://${apiHost}:${3000}/api/v1`
 const token = localStorage.getItem('access_token')
 const config = {
   headers: { Authorization: `Bearer ${token}` }
@@ -24,7 +27,7 @@ function renderCarousel(data) {
 
 function requestCarousel() {
   const carousels = []
-  axios.get('http://localhost:3000/api/v1/books/top10', config)
+  axios.get(`${baseUrl}/books/top10`, config)
     .then((response) => {
       carousels.push(...response.data)
       renderCarousel(carousels)
@@ -74,7 +77,7 @@ function renderBooks(data) {
 }
 
 function requestBooks() {
-  axios.get('http://localhost:3000/api/v1/books', config)
+  axios.get(`${baseUrl}/books`, config)
     .then((response) => {
       cards.push(...response.data)
       renderBooks(cards)
@@ -86,7 +89,7 @@ function requestBooks() {
 function requestBook() {
   let params = new URLSearchParams(document.location.search)
   let bookId = parseInt(params.get("bookId"), 10)
-  axios.get(`http://localhost:3000/api/v1/books/${bookId}`, config)
+  axios.get(`${baseUrl}/books/${bookId}`, config)
     .then((response) => {
       // renderBook(response.data)
       return response.id
@@ -102,18 +105,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // like book
 window.onload = () => {
-var likeBookForms = document.getElementsByClassName("likeBook")
-for (var i = 0; i < likeBookForms.length; i++) {
-  likeBookForms[i].addEventListener('submit', (e) => {
-    e.preventDefault()
-    fetch(`http://localhost:3000/api/v1/books/${e.target.id}`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` }
+  var likeBookForms = document.getElementsByClassName("likeBook")
+  for (var i = 0; i < likeBookForms.length; i++) {
+    likeBookForms[i].addEventListener('submit', (e) => {
+      e.preventDefault()
+      fetch(`${baseUrl}/books/${e.target.id}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(response => location.reload())
+        .catch((err) => console.log(err))
     })
-      .then(response => location.reload())
-      .catch((err) => console.log(err))
-  })
-}
+  }
 }
 
 // search-bar
