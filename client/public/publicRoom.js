@@ -6,7 +6,7 @@ let params = new URLSearchParams(document.location.search)
 const username = params.get("username")
 const room = params.get("room")
 const avatar = params.get("avatar")
-const apiHost = 'localhost'
+const apiHost = '34.202.109.95'
 const port = '3000'
 const baseUrl = `http://${apiHost}:${3000}/api/v1`
 

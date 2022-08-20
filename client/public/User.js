@@ -2,7 +2,7 @@ const token = localStorage.getItem('access_token')
 const config = {
   headers: { Authorization: `Bearer ${token}` }
 }
-const apiHost = 'localhost'
+const apiHost = '34.202.109.95'
 const port = '3000'
 const baseUrl = `http://${apiHost}:${3000}/api/v1`
 // get current user
