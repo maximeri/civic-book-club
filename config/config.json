@@ -14,10 +14,10 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
+    "username": "frodo",
+    "password": "MyNewPass1!",
+    "database": "civic_book_club",
+    "host": "34.202.109.95",
     "dialect": "mysql"
   }
 }
