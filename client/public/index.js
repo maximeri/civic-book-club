@@ -1,11 +1,8 @@
-let cards = [] // books
-const apiHost = '34.202.109.95'
-const port = '3000'
-const baseUrl = `http://${apiHost}:${3000}/api/v1`
 const token = localStorage.getItem('access_token')
 const config = {
   headers: { Authorization: `Bearer ${token}` }
 }
+let cards = [] // books
 
 // carousel
 function renderCarousel(data) {
@@ -91,7 +88,7 @@ function requestBook() {
   let bookId = parseInt(params.get("bookId"), 10)
   axios.get(`${baseUrl}/books/${bookId}`, config)
     .then((response) => {
-      // renderBook(response.data)
+      renderBook(response.data)
       return response.id
     })
     .catch((err) => console.log(err))

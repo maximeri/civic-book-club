@@ -7,9 +7,6 @@ let avatar = params.get("avatar")
 let userId = params.get("userId")
 let user2Id = ''
 let room = params.get("room")
-const apiHost = '34.202.109.95'
-const port = '3000'
-const baseUrl = `http://${apiHost}:${3000}/api/v1`
 const token = localStorage.getItem('access_token')
 const config = {
   headers: { Authorization: `Bearer ${token}` }

@@ -77,9 +77,6 @@
     crossorigin="anonymous"></script>
   <script>
     // get current user
-    const apiHost = '34.202.109.95'
-    const port = '3000'
-    const baseUrl = `http://${apiHost}:${3000}/api/v1`
     let currentUserId = ''
     let requestCurrentUserPromise = new Promise((resolve, reject) => {
       const token = localStorage.getItem('access_token')

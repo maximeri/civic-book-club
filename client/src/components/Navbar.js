@@ -1,6 +1,6 @@
-const apiHost = '34.202.109.95'
+const apiHost = 'localhost'
 const port = '3000'
-const baseUrl = `http://${apiHost}:${3000}/api/v1`
+const baseUrl = `http://${apiHost}:${port}/api/v1`
 // navbar
 function renderNavbar() {
   const token = localStorage.getItem('access_token')

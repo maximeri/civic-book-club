@@ -61,9 +61,6 @@
     integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
     crossorigin="anonymous"></script>
   <script>
-    const apiHost = '34.202.109.95'
-    const port = '3000'
-    const baseUrl = `http://${apiHost}:${3000}/api/v1`
     // get current user
     let currentUserId = ''
     let requestCurrentUserPromise = new Promise((resolve, reject) => {
@@ -102,7 +99,7 @@
         alert('Field required!')
         return
       } else {
-        fetch('${baseUrl}/books', {
+        fetch(`${baseUrl}/books`, {
           method: 'POST',
           body: payload,
           headers: { Authorization: `Bearer ${token}` }
