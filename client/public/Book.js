@@ -1,33 +1,3 @@
-const token = localStorage.getItem('access_token')
-const config = {
-  headers: { Authorization: `Bearer ${token}` }
-}
-
-
-// get current user
-let currentUserId = ''
-let requestCurrentUserPromise = new Promise((resolve, reject) => {
-  const token = localStorage.getItem('access_token')
-  const config = {
-    headers: { Authorization: `Bearer ${token}` }
-  }
-  axios.get(`${baseUrl}/get_current_user`, config)
-    .then((response) => {
-      // console.log(response.data.currentUser.id)
-      resolve(response.data.currentUser)
-      // return response.data.currentUser
-    })
-    .catch((err) => console.log(err))
-})
-
-function returnCurrentUserId(id) {
-  currentUserId = id
-}
-
-requestCurrentUserPromise.then(function (currentUser) {
-  returnCurrentUserId(currentUser.id)
-})
-
 // get userId in the url
 function getUserId() {
   let params = new URLSearchParams(document.location.search)
@@ -89,15 +59,15 @@ function hideDeleteBtn(userId) {
 }
 
 // book
-function requestBook() {
-  let params = new URLSearchParams(document.location.search)
-  let bookId = parseInt(params.get("bookId"), 10)
-  axios.get(`${baseUrl}/books/${bookId}`, config)
-    .then((response) => {
-      renderBook(response.data)
-    })
-    .catch((err) => console.log(err))
-}
+// function requestBook() {
+//   let params = new URLSearchParams(document.location.search)
+//   let bookId = parseInt(params.get("bookId"), 10)
+//   axios.get(`${baseUrl}/books/${bookId}`, config)
+//     .then((response) => {
+//       renderBook(response.data)
+//     })
+//     .catch((err) => console.log(err))
+// }
 
 function renderBook(data) {
   const template = document.querySelector('#book')
@@ -255,8 +225,31 @@ function joinEvent() {
   }
 }
 
+function submitReview() {
+  const form = document.getElementById('review-form');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault()
+    const formData = new FormData(form)
+    // Convert formData object to URL-encoded string:
+    const payload = new URLSearchParams(formData)
+    // Post the payload using Fetch:
+    let params = new URLSearchParams(document.location.search)
+    let bookId = parseInt(params.get("bookId"), 10)
+    fetch(`${baseUrl}/reviews/${bookId}`, {
+      method: 'POST',
+      body: payload,
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(res => {
+        location.reload()
+      })
+  })
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
-  requestBook()
+  // requestBook()
   requestEvents()
   requestReviews()
 })

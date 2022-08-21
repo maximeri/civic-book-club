@@ -67,37 +67,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
   <script src="/components/Navbar.js"></script>
   <script src="Book.js"></script>
+    <script src="/apis/book.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
     integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
     crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
     crossorigin="anonymous"></script>
-  <script>
-    function submitReview() {
-      const form = document.getElementById('review-form');
-      form.addEventListener('submit', function (e) {
-        e.preventDefault()
-        const formData = new FormData(form)
-        // Convert formData object to URL-encoded string:
-        const payload = new URLSearchParams(formData)
-        // Post the payload using Fetch:
-        const token = localStorage.getItem('access_token')
-        let params = new URLSearchParams(document.location.search)
-        let bookId = parseInt(params.get("bookId"), 10)
-        fetch(`${baseUrl}/reviews/${bookId}`, {
-          method: 'POST',
-          body: payload,
-          headers: { Authorization: `Bearer ${token}` }
-        })
-          .then(res => res.json())
-          .then(res => {
-            location.reload()
-          })
-      })
-    }
-
-  </script>
 </body>
-
 </html>

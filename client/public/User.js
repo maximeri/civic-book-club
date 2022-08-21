@@ -1,27 +1,3 @@
-const token = localStorage.getItem('access_token')
-const config = {
-  headers: { Authorization: `Bearer ${token}` }
-}
-// get current user
-let currentUserId = ''
-let requestCurrentUserPromise = new Promise((resolve, reject) => {
-  axios.get(`${baseUrl}/get_current_user`, config)
-    .then((response) => {
-      // console.log(response.data.currentUser.id)
-      resolve(response.data.currentUser)
-      // return response.data.currentUser
-    })
-    .catch((err) => console.log(err))
-})
-
-function returnCurrentUserId(id) {
-  currentUserId = id
-}
-
-requestCurrentUserPromise.then(function (currentUser) {
-  returnCurrentUserId(currentUser.id)
-})
-
 // get userId in the url
 function getUserId() {
   let params = new URLSearchParams(document.location.search)

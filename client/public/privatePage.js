@@ -7,10 +7,6 @@ let avatar = params.get("avatar")
 let userId = params.get("userId")
 let user2Id = ''
 let room = params.get("room")
-const token = localStorage.getItem('access_token')
-const config = {
-  headers: { Authorization: `Bearer ${token}` }
-}
 
 // Join chatroom
 socket.emit('joinRoom', { username, room, avatar })
