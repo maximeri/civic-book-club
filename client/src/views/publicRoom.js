@@ -1,7 +1,6 @@
 var socket = io()
-var form = document.getElementById('form');
-var input = document.getElementById('input');
-let params = new URLSearchParams(document.location.search)
+var form = document.getElementById('form')
+var input = document.getElementById('input')
 // Get username, room, avatar, and userId from URL
 const username = params.get("username")
 const room = params.get("room")

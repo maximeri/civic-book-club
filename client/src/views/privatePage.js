@@ -1,10 +1,8 @@
 var socket = io()
 var form = document.getElementById('form');
 var content = document.getElementById('content');
-let params = new URLSearchParams(document.location.search);
 let username = params.get("username")
 let avatar = params.get("avatar")
-let userId = params.get("userId")
 let user2Id = ''
 let room = params.get("room")
 
@@ -56,18 +54,6 @@ function outputMessage(message) {
   messages.appendChild(li)
 }
 
-function requestRooms() {
-  let params = new URLSearchParams(document.location.search)
-  let userId = parseInt(params.get("userId"), 10)
-  const rooms = []
-  axios.get(`${baseUrl}/sockets/rooms/${userId}`, config)
-    .then((response) => {
-      rooms.push(...response.data)
-      renderRooms(rooms)
-    })
-    .catch((err) => console.log(err))
-}
-
 function renderRooms(data) {
   const template = document.getElementById('userList')
   let rawHTML = ''
@@ -96,7 +82,7 @@ function renderRooms(data) {
   data.forEach(item => {
     rawHTML +=
       `
-<li class="clearfix" onclick="requestRoom(${item.Messages[0].RoomId})">
+<li class="clearfix" onclick="getRoom(${item.Messages[0].RoomId})">
               <img src="${returnNonCurrentUser(item.User1, item.User2).avatar}" alt="avatar">
               <div class="about">
                 <div class="name">${returnNonCurrentUser(item.User1, item.User2).name}</div>
@@ -108,17 +94,6 @@ function renderRooms(data) {
   })
 
   template.innerHTML = rawHTML
-}
-
-// request room
-function requestRoom(roomId) {
-  // let params = new URLSearchParams(document.location.search)
-  // let roomId = parseInt(params.get("room"), 10)
-  axios.get(`${baseUrl}/sockets/${roomId}`, config)
-    .then((response) => {
-      renderRoom(response)
-    })
-    .catch((err) => console.log(err))
 }
 
 // render room
@@ -165,9 +140,3 @@ function returnNonCurrentUser(user1, user2) {
 function hideElement(element) {
   document.querySelector(`${element}`).innerHTML = ''
 }
-
-
-document.addEventListener('DOMContentLoaded', (event) => {
-  requestRooms()
-  requestRoom()
-})

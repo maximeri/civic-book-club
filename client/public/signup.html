@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://kit.fontawesome.com/b8a8323ae3.js" crossorigin="anonymous"></script>
   <title>Civic Book Club</title>
-  <link rel="icon" type="image/x-icon" href="/favicon.png">
+  <link rel="icon" type="image/x-icon" href="/assets/favicon.png">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
     integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles/main.css">
 </head>
 
 <body>
@@ -38,7 +39,8 @@
             </div>
             <div class="form-group">
               <label for="checkPassword">Confirm Password</label>
-              <input type="password" id="checkPassword" name="checkPassword" class="form-control" placeholder="Confirm Password" value="">
+              <input type="password" id="checkPassword" name="checkPassword" class="form-control"
+                placeholder="Confirm Password" value="">
             </div>
             <button type="submit" class="btn btn-primary btn-block">Register</button>
             <a href="/auth/facebook" class="btn btn-info btn-block">Facebook Login</a>
@@ -63,42 +65,42 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
     crossorigin="anonymous"></script>
-    <script>
-      const form = document.getElementById('register-form')
-      form.addEventListener('submit', function (e) {
-        const formData = new FormData(form)
-        const payload = new URLSearchParams(formData)
-        const accountInput = document.getElementById('account')
-        const nameInput = document.getElementById('name')
-        const passwordInput = document.getElementById('password')
-        e.preventDefault()
-        if (accountInput.value === '' || passwordInput.value === '' || accountInput.value === '') {
-          alert('Field required!')
-          return
-        }
-        try {
-          fetch(`${baseUrl}/users`, {
-            method: 'POST',
-            body: payload,
+  <script>
+    const form = document.getElementById('register-form')
+    form.addEventListener('submit', function (e) {
+      const formData = new FormData(form)
+      const payload = new URLSearchParams(formData)
+      const accountInput = document.getElementById('account')
+      const nameInput = document.getElementById('name')
+      const passwordInput = document.getElementById('password')
+      e.preventDefault()
+      if (accountInput.value === '' || passwordInput.value === '' || accountInput.value === '') {
+        alert('Field required!')
+        return
+      }
+      try {
+        fetch(`${baseUrl}/users`, {
+          method: 'POST',
+          body: payload,
+        })
+          .then(res => {
+            if (res.ok) {
+              return res.json()
+            } else {
+              alert('account or email has been taken')
+              throw 'account or email has been taken'
+            }
           })
-            .then(res => {
-              if (res.ok) {
-                return res.json()
-              } else {
-                alert('account or email has been taken')
-                throw 'account or email has been taken'
-              }
-            })
-            .then(res => {
-              localStorage.setItem('access_token', res.token)
-              window.location.href = `http://${apiHost}:${port}/login.html`
-            })
-        }
-        catch (error) {
-          return error
-        }
-      })
-    </script>
+          .then(res => {
+            localStorage.setItem('access_token', res.token)
+            window.location.href = `http://${apiHost}:${port}/login.html`
+          })
+      }
+      catch (error) {
+        return error
+      }
+    })
+  </script>
 </body>
 
 </html>
