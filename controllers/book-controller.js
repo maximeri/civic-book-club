@@ -30,6 +30,9 @@ const bookController = {
   },
   getUserBooks: (req, res, next) => {
     return LikedBook.findAndCountAll({
+      attributes: {
+        exclude: ['updatedAt', 'createdAt']
+      },
       include: [{
         model: Book,
         include: [
@@ -45,7 +48,7 @@ const bookController = {
         const resultBooks = books.rows.map(r => ({
           ...r.toJSON(),
           isLiked: likedBookUserId.includes(r.bookId),
-          totalLikes: r.Book.LikedBookUsers.length
+          totalLikes: r.Book?.LikedBookUsers?.length
         }))
         return res.json(resultBooks)
       })

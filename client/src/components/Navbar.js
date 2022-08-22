@@ -5,15 +5,16 @@ const token = localStorage.getItem('access_token')
 const config = {
   headers: { Authorization: `Bearer ${token}` }
 }
+let params = new URLSearchParams(document.location.search)
+let userId = parseInt(params.get("userId"), 10)
+let bookId = parseInt(params.get("bookId"), 10)
 
 // get current user
 let currentUserId = ''
 let requestCurrentUserPromise = new Promise((resolve, reject) => {
   axios.get(`${baseUrl}/get_current_user`, config)
     .then((response) => {
-      // console.log(response.data.currentUser.id)
       resolve(response.data.currentUser)
-      // return response.data.currentUser
     })
     .catch((err) => console.log(err))
 })
@@ -26,9 +27,9 @@ requestCurrentUserPromise.then(function (currentUser) {
   returnCurrentUserId(currentUser.id)
 })
 
+
 // navbar
 function renderNavbar() {
-  if (token) {
     axios.get(`${baseUrl}/get_current_user`, config)
       .then((response) => {
         return response.data.currentUser
@@ -44,6 +45,9 @@ function renderNavbar() {
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+      <button class="btn dark" disabled> Hi ${currentUser.name}!</button>
+      </li>
         <li class="nav-item">
           <a class="nav-link" href="user.html?userId=${currentUser.id}">My Event <i class="fa-solid fa-calendar-check"></i></a>
         </li>
@@ -71,33 +75,12 @@ function renderNavbar() {
         template.innerHTML = rawHTML
       })
       .catch((err) => console.log(err))
-  } else {
-    const template = document.querySelector('#navbar')
-    let rawHTML = `
-      <nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="index.html">Civic Book Club</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="login.html">Login</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  `
-    template.innerHTML = rawHTML
-  }
 }
 
 // logout
 function logout() {
   localStorage.removeItem('access_token')
-  window.location.href = `${baseUrl}/login.html`
+  window.location.href = `/login.html`
 }
 
 

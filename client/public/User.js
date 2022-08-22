@@ -1,10 +1,3 @@
-// get userId in the url
-function getUserId() {
-  let params = new URLSearchParams(document.location.search)
-  let userId = parseInt(params.get("userId"), 10)
-  return userId
-}
-
 // render expired events
 function disabledExpireEvent(time) {
   time = new Date(time)
@@ -54,15 +47,6 @@ function renderHidden() {
   } else {
     return 'hidden'
   }
-}
-
-// user
-function requestUser() {
-  axios.get(`${baseUrl}/users/${getUserId()}`, config)
-    .then((response) => {
-      renderUser(response.data)
-    })
-    .catch((err) => console.log(err))
 }
 
 function renderUser(data) {
@@ -116,18 +100,6 @@ function renderMemberEvents(data) {
   template.innerHTML += rawHTML
 }
 
-function requestMemberEvents() {
-  const params = new URLSearchParams(document.location.search);
-  const userId = parseInt(params.get("userId"), 10)
-  const events = []
-  axios.get(`${baseUrl}/events/user/member/${userId}`, config)
-    .then((response) => {
-      events.push(...response.data)
-      renderMemberEvents(events)
-    })
-    .catch((err) => console.log(err))
-}
-
 // host events
 function renderHostEvents(data) {
   const template = document.querySelector('#host-events')
@@ -158,18 +130,6 @@ function renderHostEvents(data) {
   template.innerHTML += rawHTML
 }
 
-function requestHostEvents() {
-  const params = new URLSearchParams(document.location.search);
-  const userId = parseInt(params.get("userId"), 10)
-  const events = []
-  axios.get(`${baseUrl}/events/user/host/${userId}`, config)
-    .then((response) => {
-      events.push(...response.data)
-      renderHostEvents(events)
-    })
-    .catch((err) => console.log(err))
-}
-
 // reviews
 function renderLike(like) {
   if (like) return `fa-solid`
@@ -186,24 +146,9 @@ function hideDeleteBtn(userId) {
     return null
   }
 }
-// Delete review
-function deleteReview() {
-  if (confirm("Are you sure you want to delete this review?")) {
-    document.addEventListener('submit', function (e) {
-      e.preventDefault()
-      fetch(`${baseUrl}/reviews/${e.target.id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(response => location.reload())
-        .catch((err) => console.log(err))
-    })
-  } else {
-    console.log("You pressed Cancel!")
-  }
-}
+
 // Render reviews
-function renderReviews(data) {
+function renderUserReviews(data) {
   const template = document.querySelector('#reviews')
   let rawHTML = ''
   data.forEach(item => {
@@ -231,19 +176,6 @@ function renderReviews(data) {
   template.innerHTML += rawHTML
 }
 
-// Request reviews
-function requestReviews() {
-  let params = new URLSearchParams(document.location.search)
-  let userId = parseInt(params.get("userId"), 10)
-  const reviews = []
-  axios.get(`${baseUrl}/reviews/user/${userId}`, config)
-    .then((response) => {
-      reviews.push(...response.data)
-      renderReviews(reviews)
-    })
-    .catch((err) => console.log(err))
-}
-
 // Render like 
 function renderLike(like) {
   if (like) return `fa-solid`
@@ -252,7 +184,7 @@ function renderLike(like) {
   }
 }
 // Render books
-function renderBooks(data) {
+function renderUserBooks(data) {
   const template = document.querySelector('#books')
   let rawHTML = ''
   data.forEach(item => {
@@ -284,68 +216,3 @@ function renderBooks(data) {
   })
   template.innerHTML += rawHTML
 }
-
-// Request books
-function requestBooks() {
-  const cards = []
-  axios.get(`${baseUrl}/books/user/${getUserId()}`, config)
-    .then((response) => {
-      cards.push(...response.data)
-      renderBooks(cards)
-    })
-    .catch((err) => console.log(err))
-}
-
-// like review
-function likeReview() {
-  document.addEventListener('submit', function (e) {
-    e.preventDefault()
-    fetch(`${baseUrl}/reviews/user/${e.target.id}`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(response => location.reload())
-      .catch((err) => console.log(err))
-  })
-}
-
-// like book
-window.onload = () => {
-  var likeBookForms = document.getElementsByClassName("likeBook")
-  for (var i = 0; i < likeBookForms.length; i++) {
-    likeBookForms[i].addEventListener('submit', (e) => {
-      e.preventDefault()
-      fetch(`${baseUrl}/books/${e.target.id}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(response => location.reload())
-        .catch((err) => console.log(err))
-    })
-  }
-}
-
-// join event
-function joinEvent() {
-  var eventForms = document.getElementsByClassName("event-form")
-  for (var i = 0; i < eventForms.length; i++) {
-    eventForms[i].addEventListener('submit', function (e) {
-      e.preventDefault()
-      fetch(`${baseUrl}/events/member/${e.target.id}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(response => location.reload())
-        .catch((err) => console.log(err))
-    })
-  }
-}
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  requestUser()
-  requestBooks()
-  requestReviews()
-  requestMemberEvents()
-  requestHostEvents()
-})

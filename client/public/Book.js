@@ -1,10 +1,3 @@
-// get userId in the url
-function getUserId() {
-  let params = new URLSearchParams(document.location.search)
-  let userId = parseInt(params.get("userId"), 10)
-  return userId
-}
-
 // render no seat disabled
 function renderNoSeat(seats) {
   if (seats === 0) {
@@ -58,17 +51,6 @@ function hideDeleteBtn(userId) {
   }
 }
 
-// book
-// function requestBook() {
-//   let params = new URLSearchParams(document.location.search)
-//   let bookId = parseInt(params.get("bookId"), 10)
-//   axios.get(`${baseUrl}/books/${bookId}`, config)
-//     .then((response) => {
-//       renderBook(response.data)
-//     })
-//     .catch((err) => console.log(err))
-// }
-
 function renderBook(data) {
   const template = document.querySelector('#book')
   let rawHTML = ''
@@ -115,21 +97,6 @@ function renderEvents(data) {
   template.innerHTML = rawHTML
 }
 
-
-// request events
-function requestEvents() {
-  let params = new URLSearchParams(document.location.search)
-  let bookId = parseInt(params.get("bookId"), 10)
-  const events = []
-  axios.get(`${baseUrl}/events/book/${bookId}`, config)
-    .then((response) => {
-      // let test = response.data.forEach(e => e.ParticipatedUsers.forEach(ee => console.log(ee.id)))
-      events.push(...response.data)
-      renderEvents(events)
-    })
-    .catch((err) => console.log(err))
-}
-
 // reviews
 function renderLike(like) {
   if (like) return `fa-solid`
@@ -167,89 +134,3 @@ function renderReviews(data) {
   })
   template.innerHTML = rawHTML
 }
-
-function deleteReview() {
-  if (confirm("Are you sure you want to delete this review?")) {
-    document.addEventListener('submit', function (e) {
-      e.preventDefault()
-      fetch(`${baseUrl}/reviews/${e.target.id}`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(response => location.reload())
-        .catch((err) => console.log(err))
-    })
-  } else {
-    console.log("You pressed Cancel!")
-  }
-}
-
-function requestReviews() {
-  let params = new URLSearchParams(document.location.search)
-  let bookId = parseInt(params.get("bookId"), 10)
-  const reviews = []
-  axios.get(`${baseUrl}/reviews/${bookId}`, config)
-    .then((response) => {
-      reviews.push(...response.data)
-      renderReviews(reviews)
-    })
-    .catch((err) => console.log(err))
-}
-
-// like review
-function likeReview() {
-  document.addEventListener('submit', function (e) {
-    e.preventDefault()
-    fetch(`${baseUrl}/reviews/user/${e.target.id}`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(response => location.reload())
-      .catch((err) => console.log(err))
-  })
-}
-
-// join event
-function joinEvent() {
-  var eventForms = document.getElementsByClassName("event-form")
-  for (var i = 0; i < eventForms.length; i++) {
-    eventForms[i].addEventListener('submit', function (e) {
-      e.preventDefault()
-      fetch(`${baseUrl}/events/member/${e.target.id}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(response => location.reload())
-        .catch((err) => console.log(err))
-    })
-  }
-}
-
-function submitReview() {
-  const form = document.getElementById('review-form');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault()
-    const formData = new FormData(form)
-    // Convert formData object to URL-encoded string:
-    const payload = new URLSearchParams(formData)
-    // Post the payload using Fetch:
-    let params = new URLSearchParams(document.location.search)
-    let bookId = parseInt(params.get("bookId"), 10)
-    fetch(`${baseUrl}/reviews/${bookId}`, {
-      method: 'POST',
-      body: payload,
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(res => {
-        location.reload()
-      })
-  })
-}
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  // requestBook()
-  requestEvents()
-  requestReviews()
-})

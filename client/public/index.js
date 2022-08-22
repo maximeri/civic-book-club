@@ -18,16 +18,6 @@ function renderCarousel(data) {
   template.innerHTML += rawHTML
 }
 
-function requestCarousel() {
-  const carousels = []
-  axios.get(`${baseUrl}/books/top10`, config)
-    .then((response) => {
-      carousels.push(...response.data)
-      renderCarousel(carousels)
-    })
-    .catch((err) => console.log(err))
-}
-
 // books
 function renderLike(like) {
   if (like) return `fa-solid`
@@ -67,49 +57,6 @@ function renderBooks(data) {
     `
   })
   template.innerHTML = rawHTML
-}
-
-function requestBooks() {
-  axios.get(`${baseUrl}/books`, config)
-    .then((response) => {
-      cards.push(...response.data)
-      renderBooks(cards)
-    })
-    .catch((err) => console.log(err))
-}
-
-// book
-function requestBook() {
-  let params = new URLSearchParams(document.location.search)
-  let bookId = parseInt(params.get("bookId"), 10)
-  axios.get(`${baseUrl}/books/${bookId}`, config)
-    .then((response) => {
-      renderBook(response.data)
-      return response.id
-    })
-    .catch((err) => console.log(err))
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  requestCarousel()
-  requestBooks()
-})
-
-
-// like book
-window.onload = () => {
-  var likeBookForms = document.getElementsByClassName("likeBook")
-  for (var i = 0; i < likeBookForms.length; i++) {
-    likeBookForms[i].addEventListener('submit', (e) => {
-      e.preventDefault()
-      fetch(`${baseUrl}/books/${e.target.id}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(response => location.reload())
-        .catch((err) => console.log(err))
-    })
-  }
 }
 
 // search-bar

@@ -25,7 +25,7 @@
         <div class="card card-body">
           <h1 class="text-center mt-3">Create Event</h1>
           <p class="text-center mt-3">*You can only create events with EXISTING books</p>
-          <form id="form" action="/api/v1/events/host" method="POST">
+          <form id="add-book-event-form" action="/api/v1/events/host" method="POST">
             <div class="form-group">
               <label for="isbn">*13- Digit ISBN</label>
               <input type="number" id="isbn" name="isbn" class="form-control" placeholder="Enter 13-digit ISBN Number"
@@ -76,14 +76,13 @@
     integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
     crossorigin="anonymous"></script>
   <script>
-    let params = new URLSearchParams(document.location.search)
     let bookIsbn = parseInt(params.get("bookIsbn"), 10)
     const topicInput = document.getElementById('topic')
     const startInput = document.getElementById('start')
     const endInput = document.getElementById('end')
     const memberCountInput = document.getElementById('memberCount')
     document.querySelector('input[name="isbn"]').value = `${bookIsbn}`
-    const form = document.getElementById('form')
+    const form = document.getElementById('add-book-event-form')
     form.addEventListener('submit', function (e) {
       e.preventDefault(startInput.value)
       const formData = new FormData(form)
@@ -100,7 +99,7 @@
         return
       }
       else {
-        fetch('${baseUrl}/events/host', {
+        fetch(`${baseUrl}/events/host`, {
           method: 'POST',
           body: payload,
           headers: { Authorization: `Bearer ${token}` }

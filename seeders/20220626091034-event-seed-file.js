@@ -7,7 +7,7 @@ function generateEvents() {
       topic: `event${i + 1}`,
       start_at: new Date(),
       end_at: new Date(),
-      member_count: `${Math.floor(1 + Math.random() * 9)}`,
+      member_count: `${Math.floor(2 + Math.random() * 5)}`,
       current_member_count: 1,
       meeting_link:'https://meet.google.com/wxf-vsxc-vnk',
       host_id: `${Math.floor(1 + Math.random() * 25)}`,

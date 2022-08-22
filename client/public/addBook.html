@@ -24,7 +24,7 @@
       <div class="col-md-6 m-auto">
         <div class="card card-body">
           <h1 class="text-center mt-3">Add Book</h1>
-          <form id="form" action="/api/v1/events/host" method="POST" enctype="multipart/form-data">
+          <form id="add-book-form" action="/api/v1/events/host" method="POST" enctype="multipart/form-data">
             <div class="form-group">
               <label for="name">Book name</label>
               <input type="text" id="name" name="name" class="form-control" placeholder="Book name">
@@ -64,7 +64,7 @@
     const isbnInput = document.getElementById('isbn')
     const nameInput = document.getElementById('name')
     const introductionInput = document.getElementById('introduction')
-    const form = document.getElementById('form')
+    const form = document.getElementById('add-book-form')
     form.addEventListener('submit', function (e) {
       e.preventDefault()
       const formData = new FormData(form)

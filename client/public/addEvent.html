@@ -25,7 +25,7 @@
         <div class="card card-body">
           <h1 class="text-center mt-3">Create Event</h1>
           <p class="text-center mt-3">*You can only create events with EXISTING books</p>
-          <form id="form" action="/api/v1/events/host" method="POST">
+          <form id="add-event-form" action="/api/v1/events/host" method="POST">
             <div class="form-group">
               <label for="isbn">*13- Digit ISBN</label><span>
                 (find a <a href="/index.html" target="_blank">book</a>)
@@ -82,7 +82,7 @@
     const startInput = document.getElementById('start')
     const endInput = document.getElementById('end')
     const memberCountInput = document.getElementById('memberCount')
-    const form = document.getElementById('form')
+    const form = document.getElementById('add-event-form')
     form.addEventListener('submit', function (e) {
       e.preventDefault()
       const formData = new FormData(form)
@@ -99,7 +99,7 @@
         return
       }
       else {
-        fetch('${baseUrl}/events/host', {
+        fetch(`${baseUrl}/events/host`, {
           method: 'POST',
           body: payload,
           headers: { Authorization: `Bearer ${token}` }
