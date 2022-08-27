@@ -53,7 +53,7 @@ describe('# Book Model', () => {
     const Event = 'Event'
     const Review = 'Review'
     before(() => {
-      // Associate Book model with Book, Book, Event, Review (call assocaite)
+      // Associate Book model with User, Event, Review (call assocaite)
       Book.associate({ Event })
       Book.associate({ User })
       Book.associate({ Review })
@@ -70,7 +70,7 @@ describe('# Book Model', () => {
       done()
     })
     it('should have many books', (done) => {
-      // Test if hasMany(Book) is called
+      // Test if belongsToMany(Book) is called
       expect(Book.belongsToMany).to.have.been.calledWith(User)
       done()
     })
