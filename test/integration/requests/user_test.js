@@ -1,12 +1,12 @@
 var chai = require('chai')
 var request = require('supertest')
 var sinon = require('sinon')
-var app = require('../../app')
-var helpers = require('../../_helpers');
+var app = require('../../../app')
+var helpers = require('../../../_helpers');
 var should = chai.should()
 var expect = chai.expect;
-const db = require('../../models')
-const passport = require('../../config/passport')
+const db = require('../../../models')
+const passport = require('../../../config/passport')
 
 describe('# user requests', () => {
 

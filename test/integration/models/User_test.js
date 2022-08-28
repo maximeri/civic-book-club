@@ -10,13 +10,13 @@ const {
   Sequelize
 } = require('sequelize-test-helpers')
 
-const db = require('../../models')
+const db = require('../../../models')
 
 describe('# User Model', () => {
   // Get DataTypes from Sequelize
   const { DataTypes } = Sequelize
   // Replace the sequelize in models/user with the Sequelize here
-  const UserFactory = proxyquire('../../models/user', {
+  const UserFactory = proxyquire('../../../models/user', {
     sequelize: Sequelize
   })
 
