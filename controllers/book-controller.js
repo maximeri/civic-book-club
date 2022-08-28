@@ -94,20 +94,16 @@ const bookController = {
       .catch(err => next(err))
   },
   editBook: (req, res, next) => {
-    // once the book is created, only name, image, and introduction can be edited
+    // once the book is created only image and introduction can be edited
     const introduction = req.body.introduction || null
-    const name = req.body?.name || null
     const { file } = req
-    if (!name || !introduction) throw new Error('Field required!')
+    if (!introduction) throw new Error('Field required!')
     Promise.all([
       Book.findByPk(req.params.id),
-      Book.findOne({ where: { name } }),
       imgurFileHandler(file)])
-      .then(([book, findName, filePath]) => {
+      .then(([book, filePath]) => {
         if (!book) throw new Error('The book has not been created yet.')
-        if ((Number(book.id) !== Number(req.params.id)) && findName) throw new Error('Name has already been taken.')
         return book.update({
-          name,
           introduction,
           image: filePath || book.image
         })
