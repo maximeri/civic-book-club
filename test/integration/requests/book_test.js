@@ -15,10 +15,10 @@ describe('# book requests', () => {
     describe('POST /api/v1/books', () => {
       before(async () => {
         // Clear DB testing datas
-        await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0', null, { raw: true });
-        await db.User.destroy({ where: {}, truncate: true, force: true })
+        await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 0', null, { raw: true }) // disable the foreign key constraint, no formatting, no formatting, prevent froming building an instance of a model
+        await db.User.destroy({ where: {}, truncate: true, force: true }) // Truncate all tables, run DROP TABLE IF EXISTS
         await db.Book.destroy({ where: {}, truncate: true, force: true })
-        await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, { raw: true });
+        await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, { raw: true }); // re-enable the foreign key constraint
         // User login
         const user1 = await db.User.create({ account: 'User1', name: 'User1', email: 'User1@example.com', password: 'User1' }); this.authenticate = sinon.stub(passport, "authenticate").callsFake((strategy, options, callback) => {
           callback(null, { ...user1 }, null);
@@ -253,7 +253,6 @@ describe('# book requests', () => {
         .expect(200)
         .end(function (err, res) {
           if (err) return done(err);
-          console.log(00000000000, res.body)
           expect(res.body).to.be.an('object')
           // check introduction
           res.body.introduction.should.equal('New introduction')
