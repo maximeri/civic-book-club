@@ -56,15 +56,14 @@ const reviewController = {
       .catch(err => next(err))
   },
   editReview: (req, res, next) => {
-    const title = req.body.title || null
-    const content = req.body?.content || null
-    if (!title || !content) throw new Error('Field required!')
+    const title = req.body.title
+    const content = req.body?.content
       return Review.findByPk(req.params.id)
       .then(review => {
         if (!review) throw new Error('Review does not exist')
         return review.update({
-          title,
-          content
+          title: title || review.title,
+          content: content || review.content
         })
       })
       .then(review => {
