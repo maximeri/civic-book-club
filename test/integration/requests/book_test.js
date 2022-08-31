@@ -1,6 +1,6 @@
-var chai = require('chai')
-var request = require('supertest')
-var sinon = require('sinon')
+var chai = require('chai') // assertion library
+var request = require('supertest') // HTTP assertions
+var sinon = require('sinon') // test spies, stubs and mocks for js
 var app = require('../../../app')
 var helpers = require('../../../_helpers');
 var should = chai.should();
@@ -30,7 +30,7 @@ describe('# book requests', () => {
       })
 
       // Add a book - POST /books
-      it(' - successfully', (done) => {
+      it(' - POST /api/v1/books successfully', (done) => {
         request(app)
           .post('/api/v1/books')
           .send('name=The+A.B.C.+Murders&isbn=9781579126247&introduction=introduction&image=image')
@@ -79,7 +79,7 @@ describe('# book requests', () => {
       })
 
       // Like a book - POST /api/v1/books/:id
-      it(' - successfully', (done) => {
+      it(' - POST /api/v1/books/:id successfully', (done) => {
         request(app)
           .post('/api/v1/books/1')
           .set('Accept', 'application/json')
