@@ -35,7 +35,7 @@ describe('# event requests', () => {
       it(' - POST /events/host successfully', (done) => {
         request(app)
           .post('/api/v1/events/host')
-          .send('isbn=9781579126247&topic=Event2&start=2022-08-30T06:34:09.000Z&end=2022-08-31T06:34:09.000Z&memberCount=3&meetingLink=meetingLink')
+          .send('isbn=9781579126247&topic=Event2&start=2023-08-30T06:34:09.000Z&end=2023-08-31T06:34:09.000Z&memberCount=3&meetingLink=meetingLink')
           .set('Accept', 'application/json')
           .expect(200)
           .end(function (err, res) {
@@ -238,6 +238,7 @@ describe('# event requests', () => {
         await db.User.destroy({ where: {}, truncate: true, force: true })
         await db.Book.destroy({ where: {}, truncate: true, force: true })
         await db.Event.destroy({ where: {}, truncate: true, force: true })
+        await db.Participation.destroy({ where: {}, truncate: true, force: true })
         await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, { raw: true });
         // Login
         const user1 = await db.User.create({ account: 'User1', name: 'User1', email: 'User1@example.com', password: 'User1' }); this.authenticate = sinon.stub(passport, "authenticate").callsFake((strategy, options, callback) => {
@@ -247,15 +248,16 @@ describe('# event requests', () => {
         this.getUser = sinon.stub(
           helpers, 'getUser'
         ).returns({ id: 1 })
-        // Add a mock up book
-        await db.Event.create({ topic: 'topic1', startAt: '2022-09-15 00:00:00', endAt: '2022-09-30 00:00:00', memberCount: 3, meetingLink: 'googlemeet.com', currentMemberCount: 2, hostId: 2, bookId: 1 })
-        await db.Participation.create({ eventId: 1, memberId: 1 })
+        // Add a mock up data
+        await db.Event.create({ topic: 'topic1', startAt: '2022-09-15 00:00:00', endAt: '2022-09-30 00:00:00', memberCount: 3, meetingLink: 'googlemeet.com', currentMemberCount: 1, hostId: 1, bookId: 1 })
+        await db.Event.create({ topic: 'topic2', startAt: '2022-09-15 00:00:00', endAt: '2022-09-30 00:00:00', memberCount: 3, meetingLink: 'googlemeet.com', currentMemberCount: 2, hostId: 2, bookId: 1 })
+        await db.Participation.create({ eventId: 2, memberId: 1 })
       })
 
     // DELETE /events/member/:id - unjoin an event
     it(' - DELETE /events/member/:id successfully', (done) => {
       request(app)
-        .delete('/api/v1/events/member/1')
+        .delete('/api/v1/events/member/2')
         .set('Accept', 'application/json')
         .expect(200)
         .end(function (err, res) {
@@ -283,6 +285,7 @@ describe('# event requests', () => {
         await db.User.destroy({ where: {}, truncate: true, force: true })
         await db.Book.destroy({ where: {}, truncate: true, force: true })
         await db.Event.destroy({ where: {}, truncate: true, force: true })
+        await db.Participation.destroy({ where: {}, truncate: true, force: true })
         await db.sequelize.query('SET FOREIGN_KEY_CHECKS = 1', null, { raw: true });
       })
     })
