@@ -1,8 +1,8 @@
 // Testing items: 1. attributes 2. associations 3. CRUD
-var chai = require('chai')
-var sinon = require('sinon')
-var proxyquire = require('proxyquire');
-chai.use(require('sinon-chai'))
+var chai = require('chai') // assertion library
+var sinon = require('sinon') // test spies, stubs and mocks for js
+var proxyquire = require('proxyquire') // stubs nodeJS require dependencies with minimalistic module
+chai.use(require('sinon-chai')) // custom assertions for using the Sinon.JS  framework with the Chai assertion library
 
 const { expect } = require('chai')
 const {
