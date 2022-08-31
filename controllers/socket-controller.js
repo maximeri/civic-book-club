@@ -77,6 +77,7 @@ const socketController = {
       }
     })
       .then(room => {
+        room = room.toJSON()
         return res.json(room)
       })
   },
@@ -106,6 +107,7 @@ const socketController = {
       content
     }) 
     .then(message => {
+    message = message.toJSON()
      return res.json(message)
   })
   }
