@@ -1,12 +1,12 @@
 var chai = require('chai') // assertion library
 var request = require('supertest') // HTTP assertions
 var sinon = require('sinon') // test spies, stubs and mocks for js
-var app = require('../../../app')
-var helpers = require('../../../_helpers');
+var app = require('../../app')
+var helpers = require('../../_helpers');
 var should = chai.should();
 var expect = chai.expect;
-const db = require('../../../models')
-const passport = require('../../../config/passport')
+const db = require('../../models')
+const passport = require('../../config/passport')
 
 describe('# book requests', () => {
 

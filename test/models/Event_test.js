@@ -10,13 +10,13 @@ const {
   Sequelize
 } = require('sequelize-test-helpers')
 
-const db = require('../../../models')
+const db = require('../../models')
 
 describe('# Event Model', () => {
   // Get DataTypes from Sequelize
   const { DataTypes } = Sequelize
   // Replace the sequelize in models/event with the Sequelize here
-  const EventFactory = proxyquire('../../../models/event', {
+  const EventFactory = proxyquire('../../models/event', {
     sequelize: Sequelize
   })
 
