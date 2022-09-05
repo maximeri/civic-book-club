@@ -2,9 +2,6 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-// router.get('/auth/facebook', passport.authenticate('facebook', {
-//   scope: ['public_profile','email']
-// }))
 router.get('/auth/facebook',
   passport.authenticate('facebook'));
 

@@ -79,8 +79,8 @@ passport.use(
 )
 
 // serialize and deserialize user
-passport.serializeUser((user, done) => {
-  done(null, user.id)
+passport.serializeUser((user, cb) => {
+  cb(null, user.id)
 })
 passport.deserializeUser((id, cb) => {
   return User.findByPk(id, {
