@@ -7,18 +7,18 @@ async function start() {
   await client.connect()
   console.log('redis connected')
 }
-function cache (req, res, next) {
-  return new Promise(async function (resolve, reject) {
-    const value = await client.get('images');
-    if (value != null) {
+
+async function cache(req, res, next) {
+  const value = await client.get('images');
+  if (value != null) {
       console.log('cache hit')
-      resolve(JSON.parse(value));
       return res.json(JSON.parse(value));
     }
     else {
+    console.log('MySQL hit')
       next()
     }
-  })
 }
-start()
+
+start() // connect to Redis when starting the app
 module.exports = {cache}
