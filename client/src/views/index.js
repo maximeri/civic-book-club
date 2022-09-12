@@ -7,11 +7,7 @@ function renderCarousel(data) {
   data.forEach((item) => {
     rawHTML += `
     <div class="carousel-item">
-    <img src="${item.image}" class="d-block w-100 p-3" alt="...">
-      <div class="carousel-caption d-none d-md-block">
-        <h5>${item.name}</h5>
-        <p>${item.introduction}</p>
-      </div>
+    <img src="${item}" class="d-block w-100 p-3" alt="...">
     </div>
     `
   })

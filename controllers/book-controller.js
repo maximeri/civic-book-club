@@ -1,5 +1,9 @@
 const { Book, User, LikedBook } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
+const redis = require('redis')
+const reids_port = process.env.PORT || 6379
+const client = redis.createClient(reids_port)
+client.connect()
 
 const bookController = {
   getBooks: (req, res, next) => {
@@ -68,7 +72,11 @@ const bookController = {
         }))
         books.sort((a, b) => b.likeCount - a.likeCount)
         books = books.slice(0, 10)
-        res.json(books)
+        // get images
+        images = books.map(b => b.image)
+        // Set data to Redis
+        client.setEx("images", 3600, JSON.stringify(images))
+        res.json(images)
       })
       .catch(err => next(err))
   },

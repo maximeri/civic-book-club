@@ -2,7 +2,7 @@
 const faker = require('faker')
 function generateBooks() {
   const arr = []
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 25; i++) {
     arr[i] = {
       id: i + 1,
       name: `book${i + 1}`,
