@@ -84,7 +84,7 @@
           })
           .then(res => {
             localStorage.setItem('access_token', res.token)
-            window.location.href = "http://localhost:3000/index.html"
+            window.location.href = `http://${apiHost}:${port}/index.html`
           })
       }
       catch (error) {
