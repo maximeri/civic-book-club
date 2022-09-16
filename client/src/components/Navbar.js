@@ -1,6 +1,6 @@
 const apiHost = 'localhost'
 const port = '3000'
-const baseUrl = `http://${apiHost}:${port}/api/v1`
+const baseUrl = `/api/v1`
 const token = localStorage.getItem('access_token')
 const config = {
   headers: { Authorization: `Bearer ${token}` }
