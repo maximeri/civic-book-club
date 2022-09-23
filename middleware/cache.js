@@ -1,6 +1,8 @@
 const redis = require('redis')
 const reids_port = process.env.REDIS_PORT || 6379
-const client = redis.createClient(reids_port)
+const client = redis.createClient({
+  url: 'redis://redis:6379'
+});
 
 
 async function start() {

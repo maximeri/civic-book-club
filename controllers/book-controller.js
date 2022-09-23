@@ -2,7 +2,9 @@ const { Book, User, LikedBook } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 const redis = require('redis')
 const reids_port = process.env.PORT || 6379
-const client = redis.createClient(reids_port)
+const client = redis.createClient({
+  url: 'redis://redis:6379'
+});
 client.connect()
 
 const bookController = {

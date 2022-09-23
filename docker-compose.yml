@@ -1,0 +1,41 @@
+version: "3.8"
+services: ## services object
+  db:
+    container_name: mysql
+    image: mysql:8
+    command: mysqld --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: civic_book_club
+    ports: 
+      - 3306:3306
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+    volumes:
+      - my-db:/var/lib/mysql
+  cache:
+    container_name: redis
+    image: redis:alpine
+    restart: always
+    ports: 
+      - 6379:6379
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    command: redis-server
+  app:
+    container_name: app
+    image: civic-book-club
+    restart: always
+    # build: .
+    ports:
+      - "3000:3000"
+    env_file: .env
+    depends_on:
+      - db
+      - cache
+  volumes:
+  my-db:
+
