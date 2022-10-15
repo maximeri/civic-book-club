@@ -1,0 +1,56 @@
+# Civic Book Club
+Help book lovers host and join book discussion meetups online with ease
+
+## Website 
+[Link](http://34.202.109.95/login.html)
+
+Test Account1:
+* Account: user1
+* Password: 12345678
+
+Test Account2:
+* Email: user2
+* Password: 12345678
+
+## Table of Contents
+* [Features](#Features)
+* [Technologies](#Technologies)
+
+## Features
+* Create and join online book discussions based on books
+* Create books and add them to your favorites
+* Add and see other users' books reviews
+* Support public chat room and direct message
+
+
+## Technologies
+### Architecture
+![architure](https://d16llsq1urfp7y.cloudfront.net/ripple-note/architecture_altered.png)
+
+### Backend
+* Environment: Linux + **Node.js**
+* Framework: **Express.js**
+* Real-time Data Transport: **Socket.IO**
+
+### Front-End 
+* HTML
+* CSS
+* JavaScript
+
+### Database
+* **MySQL**
+* Schema: 
+
+![Imgur](https://i.imgur.com/D5q5kMI.png)
+
+
+
+### Networking
+* Protocol: **HTTP**
+* Reverse Proxy: **Nginx**
+
+### Tools
+* Test: **Mocha + Chai + Sinon**
+
+### AWS Cloud Services
+* **EC2**
