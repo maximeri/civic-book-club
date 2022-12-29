@@ -34,7 +34,8 @@ Test Account2:
 
 ### Front-End 
 * HTML
-* CSS* JavaScript
+* CSS
+* JavaScript
 
 ### Database
 * **MySQL**
@@ -43,6 +44,8 @@ Test Account2:
 ![schema](https://i.imgur.com/D5q5kMI.png)
 
 
+### Cache
+* Redis
 
 ### Networking
 * Protocol: **HTTP**
