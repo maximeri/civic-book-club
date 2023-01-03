@@ -2,7 +2,7 @@
 Help book lovers host and join book discussion meetups online with ease
 
 ## Website 
-[Link](http://34.202.109.95/login.html)
+[Link](https://civicbookclub.com/)
 
 Test Account1:
 * Account: user1
