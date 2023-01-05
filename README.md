@@ -48,7 +48,7 @@ Test Account2:
 * Redis
 
 ### Networking
-* Protocol: **HTTP**
+* Protocol: **HTTPS**
 * Reverse Proxy: **Nginx**
 
 ### Tools
